@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install qt6-base-dev
+        sudo apt install qt6-base-dev libglx-dev
 
     - uses: actions/checkout@v4
       with:
