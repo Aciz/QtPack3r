@@ -39,7 +39,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: QtPack3r-linux-x64.zip
+        name: QtPack3r-linux-x64
         path: ${{ github.workspace }}/build/QtPack3r
 
   Windows:
@@ -80,5 +80,5 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: QtPack3r-win-x64.zip
+        name: QtPack3r-win-x64
         path: ${{ github.workspace }}/build/Release
