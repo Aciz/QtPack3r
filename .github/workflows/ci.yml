@@ -1,0 +1,84 @@
+name: QtPack3r CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master" ]
+    paths-ignore:
+      - .gitignore
+      - .clang-format
+      - README.md
+  pull_request:
+    branches: [ "master" ]
+    paths-ignore:
+      - .gitignore
+      - .clang-format
+      - README.md
+
+jobs:
+  Linux:
+    name: Linux x64
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install qt6-base-dev
+
+    - uses: actions/checkout@v4
+      with:
+        fetch-depths: 0
+
+    - name: Configure CMake
+      run: cmake -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=release
+
+    - name: Build
+      run: cmake --build ${{ github.workspace }}/build --config release --parallel
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: QtPack3r-linux-x64.zip
+        path: ${{ github.workspace }}/build/QtPack3r
+
+  Windows:
+    name: Windows x64
+    runs-on: windows-latest
+
+    steps:
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.8.1'
+        target: 'desktop'
+        dir: '${{ github.workspace }}/Qt/'
+        extra: '--external 7z'
+
+    - uses: actions/checkout@v4
+      with:
+        fetch-depths: 0
+
+    - name: Configure CMake
+      run: cmake -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=release
+
+    - name: Build
+      run: cmake --build ${{ github.workspace }}/build --config release --parallel
+
+    - name: Deploy with WinDeployQt
+      run: |
+        windeployqt \
+        --release \
+        --force \
+        --no-translations \
+        --no-compiler-runtime \
+        --no-opengl-sw \
+        --no-system-d3d-compiler \
+        --skip-plugin-types generic,iconengines,imageformats,networkinformation \
+        ${{ github.workspace }}/build/Release/QtPack3r.exe
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: QtPack3r-win-x64.zip
+        path: ${{ github.workspace }}/build/Release
