@@ -56,7 +56,7 @@ private:
 
   QtPack3rWidget *qtPack3rwidget{};
 
-  const QString pack3rLink = "https://github.com/ovska/Pack3r";
+  const QString pack3rLink = "https://github.com/ovska/Pack3r/releases/latest";
   const QString qtPack3rLink = "https://github.com/Aciz/QtPack3r";
   const QString qtPack3rBugReportLink =
       "https://github.com/Aciz/QtPack3r/issues/new";
