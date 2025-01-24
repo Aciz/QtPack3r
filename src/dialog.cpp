@@ -71,7 +71,7 @@ void Dialog::setupOverwriteMessageBox(QMessageBox &messageBox) {
 }
 
 void Dialog::setupSaveMapsPathMessageBox(QMessageBox &messageBox) {
-  messageBox.setWindowTitle(tr("Save mapping directory as default?"));
+  messageBox.setWindowTitle(tr("Save as default?"));
   messageBox.setText(tr("Do you want to save this path as the default mapping "
                         "installation location?"));
   messageBox.setInformativeText(
@@ -82,13 +82,13 @@ void Dialog::setupSaveMapsPathMessageBox(QMessageBox &messageBox) {
 }
 
 void Dialog::setupPack3rRunErrorMessageBox(QMessageBox &messageBox) {
-  messageBox.setWindowTitle(tr("Unable to execute Pack3r command"));
+  messageBox.setWindowTitle(tr("Invalid Pack3r command"));
   messageBox.setIcon(QMessageBox::Critical);
   messageBox.setWindowModality(Qt::ApplicationModal);
 }
 
 void Dialog::setupResetPreferencesMessageBox(QMessageBox &messageBox) {
-  messageBox.setWindowTitle(tr("Reset preferences to defaults?"));
+  messageBox.setWindowTitle(tr("Reset to defaults?"));
   messageBox.setIcon(QMessageBox::Question);
   messageBox.setText(tr("This will reset all preferences to default values."));
   messageBox.setInformativeText(tr("Are you sure you want to continue?"));
