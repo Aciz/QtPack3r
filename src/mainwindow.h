@@ -24,8 +24,8 @@
 
 #pragma once
 
-#ifndef PACK3R_GUI_VERSION
-#define PACK3R_GUI_VERSION "unversioned"
+#ifndef QTPACK3R_VERSION
+#define QTPACK3R_VERSION "unversioned"
 #endif
 
 #ifndef PROJECT_NAME

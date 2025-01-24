@@ -39,7 +39,7 @@ qt_add_executable(${CMAKE_PROJECT_NAME}
 
 )
 
-target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE PACK3R_GUI_VERSION="${CMAKE_PROJECT_VERSION}")
+target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE QTPACK3R_VERSION="${CMAKE_PROJECT_VERSION}")
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE PROJECT_NAME="${CMAKE_PROJECT_NAME}")
 
 target_link_libraries(${CMAKE_PROJECT_NAME}
