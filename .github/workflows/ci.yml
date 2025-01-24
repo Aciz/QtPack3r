@@ -52,7 +52,7 @@ jobs:
       with:
         version: '6.8.1'
         target: 'desktop'
-        dir: '${{ github.workspace }}/Qt/'
+        dir: '${{ github.workspace }}'
         extra: '--external 7z'
 
     - uses: actions/checkout@v4
