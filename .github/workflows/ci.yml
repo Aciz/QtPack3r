@@ -24,11 +24,11 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install qt6-base-dev
+        sudo apt install qt6-base-dev libglx-dev libgl1-mesa-dev
 
     - uses: actions/checkout@v4
       with:
-        fetch-depths: 0
+        fetch-depth: 0
 
     - name: Configure CMake
       run: cmake -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=release
@@ -39,7 +39,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: QtPack3r-linux-x64.zip
+        name: QtPack3r-linux-x64
         path: ${{ github.workspace }}/build/QtPack3r
 
   Windows:
@@ -52,33 +52,33 @@ jobs:
       with:
         version: '6.8.1'
         target: 'desktop'
-        dir: '${{ github.workspace }}/Qt/'
+        cache: 'true'
         extra: '--external 7z'
 
     - uses: actions/checkout@v4
       with:
-        fetch-depths: 0
+        fetch-depth: 0
 
     - name: Configure CMake
-      run: cmake -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=release
+      run: cmake -B ${{ github.workspace }}/build
 
     - name: Build
       run: cmake --build ${{ github.workspace }}/build --config release --parallel
 
     - name: Deploy with WinDeployQt
       run: |
-        windeployqt \
-        --release \
-        --force \
-        --no-translations \
-        --no-compiler-runtime \
-        --no-opengl-sw \
-        --no-system-d3d-compiler \
-        --skip-plugin-types generic,iconengines,imageformats,networkinformation \
-        ${{ github.workspace }}/build/Release/QtPack3r.exe
+        windeployqt `
+        --release `
+        --force `
+        --no-translations `
+        --no-compiler-runtime `
+        --no-opengl-sw `
+        --no-system-d3d-compiler `
+        --skip-plugin-types generic,iconengines,imageformats,networkinformation `
+        "${{ github.workspace }}/build/Release/QtPack3r.exe"
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: QtPack3r-win-x64.zip
+        name: QtPack3r-win-x64
         path: ${{ github.workspace }}/build/Release
