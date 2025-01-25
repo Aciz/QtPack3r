@@ -97,12 +97,12 @@ jobs:
         with:
           pattern: QtPack3r-*.zip
           merge-multiple: false
-          path: ${{ github.workspace }}/QtPacker-release/
+          path: ${{ github.workspace }}/QtPack3r-release/
 
       - name: Upload release
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: QtPack3r ${{ github.ref_name }}
-          files: ${{ github.workspace }}/QtPacker-release/*.zip
+          files: ${{ github.workspace }}/QtPack3r-release/*.zip
           draft: true
