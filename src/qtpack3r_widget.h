@@ -166,8 +166,6 @@ private:
   QPair<QString, QStringList> currentCmd{};
 
   struct UIPaths {
-    explicit UIPaths(QObject *parent) {}
-
     QGroupBox *groupBox{};
     QGridLayout *layout{};
 
@@ -187,8 +185,6 @@ private:
   };
 
   struct UIOptions {
-    explicit UIOptions(QObject *parent) {}
-
     QGroupBox *groupBox{};
     QGridLayout *checkboxLayout{};
     QGridLayout *mainLayout{};
@@ -213,8 +209,6 @@ private:
   };
 
   struct UIDebug {
-    explicit UIDebug(QObject *parent) {}
-
     QGroupBox *groupBox{};
     QGridLayout *verbosityLayout{};
     QGridLayout *mainLayout{};
@@ -226,8 +220,6 @@ private:
   };
 
   struct UICommandPreview {
-    explicit UICommandPreview(QObject *parent) {}
-
     QGroupBox *groupBox{};
     QGridLayout *layout{};
 
@@ -241,8 +233,6 @@ private:
   };
 
   struct UIOutput {
-    explicit UIOutput(QObject *parent) {}
-
     QGroupBox *groupBox{};
     QGridLayout *layout{};
 
@@ -256,11 +246,11 @@ private:
   };
 
   struct UI {
-    UIPaths *paths;
-    UIOptions *options;
-    UIDebug *debug;
-    UICommandPreview *commandPreview;
-    UIOutput *output;
+    UIPaths paths;
+    UIOptions options;
+    UIDebug debug;
+    UICommandPreview commandPreview;
+    UIOutput output;
   };
 
   UI ui{};

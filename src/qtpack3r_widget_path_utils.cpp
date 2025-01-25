@@ -42,10 +42,10 @@ QString QtPack3rWidget::getMapFile() {
 
   if (path.toString().isEmpty()) {
     mapsPath = QDir::homePath();
-    ui.paths->defaultMapPathSet = false;
+    ui.paths.defaultMapPathSet = false;
   } else {
     mapsPath = path.toString();
-    ui.paths->defaultMapPathSet = true;
+    ui.paths.defaultMapPathSet = true;
   }
 
   return NATIVE_GETFILE(this, tr("Open map file"), mapsPath,
@@ -63,11 +63,11 @@ QString QtPack3rWidget::getOutputPath() {
 }
 
 void QtPack3rWidget::findPack3r() {
-  ui.paths->pack3rPathField->setText(getPack3rPath());
+  ui.paths.pack3rPathField->setText(getPack3rPath());
 
-  if (!ui.paths->pack3rPathField->text().isEmpty()) {
+  if (!ui.paths.pack3rPathField->text().isEmpty()) {
     preferences.writeSetting(Preferences::Settings::PACK3R_PATH,
-                             ui.paths->pack3rPathField->text());
+                             ui.paths.pack3rPathField->text());
     updateCommandPreview();
   }
 }
@@ -86,19 +86,19 @@ void QtPack3rWidget::openMap() {
     return;
   }
 
-  ui.paths->mapPathField->setText(path);
+  ui.paths.mapPathField->setText(path);
   autoFillOutputPath(path);
 
-  if (!ui.paths->defaultMapPathSet) {
+  if (!ui.paths.defaultMapPathSet) {
     QMessageBox dialog{};
     Dialog::setupMessageBox(dialog, Dialog::SAVE_MAPS_PATH);
 
     const int ret = dialog.exec();
 
     if (ret == QMessageBox::Yes) {
-      const bool isPk3Dir = ui.paths->mapPathField->text().contains(
+      const bool isPk3Dir = ui.paths.mapPathField->text().contains(
           QDir::toNativeSeparators(".pk3dir/maps/"), Qt::CaseInsensitive);
-      auto splits = ui.paths->mapPathField->text().split(NATIVE_PATHSEP);
+      auto splits = ui.paths.mapPathField->text().split(NATIVE_PATHSEP);
 
       // we want the path to end in 'etmain', so strip the ending
       // ../etmain/maps/mapname.map or ../etmain/foo.pk3dir/maps/mapname.map
@@ -122,14 +122,14 @@ void QtPack3rWidget::setOutput() {
   }
 
   // if we have not selected a map file yet, fill the output field
-  if (ui.paths->mapPathField->text().isEmpty()) {
-    ui.paths->outputPathField->setText(path);
+  if (ui.paths.mapPathField->text().isEmpty()) {
+    ui.paths.outputPathField->setText(path);
   } else { // append the default output naming to the directory string
-    const auto splits = ui.paths->mapPathField->text().split(NATIVE_PATHSEP);
+    const auto splits = ui.paths.mapPathField->text().split(NATIVE_PATHSEP);
 
     path.append(NATIVE_PATHSEP + splits.last());
     replaceMapFileExtension(path);
-    ui.paths->outputPathField->setText(path);
+    ui.paths.outputPathField->setText(path);
   }
 
   updateCommandPreview();
@@ -146,11 +146,11 @@ void QtPack3rWidget::autoFillOutputPath(const QString &file) const {
 
   outputPath.remove(mapsDir, Qt::CaseInsensitive);
   replaceMapFileExtension(outputPath);
-  ui.paths->outputPathField->setText(outputPath);
+  ui.paths.outputPathField->setText(outputPath);
 }
 
 void QtPack3rWidget::replaceMapFileExtension(QString &str) const {
-  const QString ext = ui.options->sourceCheckbox->isChecked() ? ".zip" : ".pk3";
+  const QString ext = ui.options.sourceCheckbox->isChecked() ? ".zip" : ".pk3";
 
   if (str.endsWith(".map", Qt::CaseInsensitive)) {
     str.replace(".map", ext);
@@ -160,19 +160,17 @@ void QtPack3rWidget::replaceMapFileExtension(QString &str) const {
 }
 
 void QtPack3rWidget::updateOutputExtension() const {
-  const QString ext = ui.options->sourceCheckbox->isChecked() ? ".zip" : ".pk3";
+  const QString ext = ui.options.sourceCheckbox->isChecked() ? ".zip" : ".pk3";
 
   // output isn't set yet, or we're pointing to a directory
-  if (!ui.paths->outputPathField->text().endsWith(".pk3",
-                                                  Qt::CaseInsensitive) &&
-      !ui.paths->outputPathField->text().endsWith(".zip",
-                                                  Qt::CaseInsensitive)) {
+  if (!ui.paths.outputPathField->text().endsWith(".pk3", Qt::CaseInsensitive) &&
+      !ui.paths.outputPathField->text().endsWith(".zip", Qt::CaseInsensitive)) {
     return;
   }
 
   // call replace() only to the last 4 characters to only change the extension,
   // otherwise we mess up filepath when the output points to a .pk3dir
-  QString tmp = ui.paths->outputPathField->text();
-  tmp.replace(ui.paths->outputPathField->text().length() - 4, 4, ext);
-  ui.paths->outputPathField->setText(tmp);
+  QString tmp = ui.paths.outputPathField->text();
+  tmp.replace(ui.paths.outputPathField->text().length() - 4, 4, ext);
+  ui.paths.outputPathField->setText(tmp);
 }

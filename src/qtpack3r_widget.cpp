@@ -63,15 +63,15 @@ void QtPack3rWidget::parseOptions() const {
       preferences.readSetting(Preferences::Settings::PACK3R_PATH);
 
   if (!setting.toString().isEmpty()) {
-    ui.paths->pack3rPathField->setText(setting.toString());
+    ui.paths.pack3rPathField->setText(setting.toString());
   }
 }
 
 void QtPack3rWidget::setDefaults() {
-  pack3rCommands[NOSCAN].second.value = ui.options->noScanField->text();
-  pack3rCommands[NOPACK].second.value = ui.options->noPackField->text();
+  pack3rCommands[NOSCAN].second.value = ui.options.noScanField->text();
+  pack3rCommands[NOPACK].second.value = ui.options.noPackField->text();
   pack3rCommands[VERBOSITY].second.value =
-      ui.debug->verbosityCombobox->currentText().toLower();
+      ui.debug.verbosityCombobox->currentText().toLower();
 }
 
 bool QtPack3rWidget::canRunPack3r() const {
@@ -80,16 +80,16 @@ bool QtPack3rWidget::canRunPack3r() const {
 
   bool canRun = true;
 
-  if (ui.paths->pack3rPathField->text().isEmpty()) {
+  if (ui.paths.pack3rPathField->text().isEmpty()) {
     dialog.setText(tr("Unable to find Pack3r executable!"));
     dialog.setInformativeText(
         tr("Make sure path to Pack3r executable is set."));
     canRun = false;
-  } else if (ui.paths->mapPathField->text().isEmpty()) {
+  } else if (ui.paths.mapPathField->text().isEmpty()) {
     dialog.setText(tr("No map file specified!"));
     dialog.setInformativeText(tr("Please select a valid map file to process."));
     canRun = false;
-  } else if (ui.paths->outputPathField->text().isEmpty()) {
+  } else if (ui.paths.outputPathField->text().isEmpty()) {
     dialog.setText(tr("No output file specified!"));
     dialog.setInformativeText(tr("Please specify a valid output file."));
     canRun = false;
@@ -114,55 +114,54 @@ void QtPack3rWidget::resetWidgetState() {
     pack3rCommands[i].second.value.clear();
   }
 
-  ui.paths->pack3rPathField->clear();
-  ui.paths->mapPathField->clear();
+  ui.paths.pack3rPathField->clear();
+  ui.paths.mapPathField->clear();
 
-  QSignalBlocker outputCheckboxBlocker(ui.paths->outputCheckbox);
-  QSignalBlocker outputPathFieldBlocker(ui.paths->outputPathField);
-  ui.paths->outputCheckbox->setChecked(false);
-  ui.paths->outputPathField->clear();
+  QSignalBlocker outputCheckboxBlocker(ui.paths.outputCheckbox);
+  QSignalBlocker outputPathFieldBlocker(ui.paths.outputPathField);
+  ui.paths.outputCheckbox->setChecked(false);
+  ui.paths.outputPathField->clear();
 
-  QSignalBlocker dryRunCheckboxBlocker(ui.options->dryRunCheckbox);
-  QSignalBlocker overwriteCheckboxBlocker(ui.options->overwriteCheckbox);
-  QSignalBlocker looseCheckboxBlocker(ui.options->looseCheckbox);
-  QSignalBlocker sourceCheckboxBlocker(ui.options->sourceCheckbox);
-  QSignalBlocker includePk3CheckboxBlocker(ui.options->includePk3Checkbox);
-  ui.options->dryRunCheckbox->setChecked(false);
-  ui.options->overwriteCheckbox->setChecked(false);
-  ui.options->looseCheckbox->setChecked(false);
-  ui.options->sourceCheckbox->setChecked(false);
-  ui.options->includePk3Checkbox->setChecked(false);
+  QSignalBlocker dryRunCheckboxBlocker(ui.options.dryRunCheckbox);
+  QSignalBlocker overwriteCheckboxBlocker(ui.options.overwriteCheckbox);
+  QSignalBlocker looseCheckboxBlocker(ui.options.looseCheckbox);
+  QSignalBlocker sourceCheckboxBlocker(ui.options.sourceCheckbox);
+  QSignalBlocker includePk3CheckboxBlocker(ui.options.includePk3Checkbox);
+  ui.options.dryRunCheckbox->setChecked(false);
+  ui.options.overwriteCheckbox->setChecked(false);
+  ui.options.looseCheckbox->setChecked(false);
+  ui.options.sourceCheckbox->setChecked(false);
+  ui.options.includePk3Checkbox->setChecked(false);
 
-  QSignalBlocker renameCheckboxBlocker(ui.options->renameCheckbox);
-  QSignalBlocker renameFieldBlocker(ui.options->renameField);
-  ui.options->renameCheckbox->setChecked(false);
-  ui.options->renameField->clear();
+  QSignalBlocker renameCheckboxBlocker(ui.options.renameCheckbox);
+  QSignalBlocker renameFieldBlocker(ui.options.renameField);
+  ui.options.renameCheckbox->setChecked(false);
+  ui.options.renameField->clear();
 
-  QSignalBlocker noScanCheckboxBlocker(ui.options->noScanCheckbox);
-  QSignalBlocker noScanFieldBlocker(ui.options->noScanField);
-  ui.options->noScanCheckbox->setChecked(false);
-  ui.options->noScanField->setText(noScanDefaultStr);
+  QSignalBlocker noScanCheckboxBlocker(ui.options.noScanCheckbox);
+  QSignalBlocker noScanFieldBlocker(ui.options.noScanField);
+  ui.options.noScanCheckbox->setChecked(false);
+  ui.options.noScanField->setText(noScanDefaultStr);
 
-  QSignalBlocker noPackCheckboxBlocker(ui.options->noPackCheckbox);
-  QSignalBlocker noPackFieldBlocker(ui.options->noPackField);
-  ui.options->noPackCheckbox->setChecked(false);
-  ui.options->noPackField->setText(noPackDefaultStr);
+  QSignalBlocker noPackCheckboxBlocker(ui.options.noPackCheckbox);
+  QSignalBlocker noPackFieldBlocker(ui.options.noPackField);
+  ui.options.noPackCheckbox->setChecked(false);
+  ui.options.noPackField->setText(noPackDefaultStr);
 
-  QSignalBlocker modsCheckboxBlocker(ui.options->modsCheckbox);
-  QSignalBlocker modsFieldBlocker(ui.options->modsField);
-  ui.options->modsCheckbox->setChecked(false);
-  ui.options->modsField->clear();
+  QSignalBlocker modsCheckboxBlocker(ui.options.modsCheckbox);
+  QSignalBlocker modsFieldBlocker(ui.options.modsField);
+  ui.options.modsCheckbox->setChecked(false);
+  ui.options.modsField->clear();
 
-  QSignalBlocker verbosityComboboxBlocker(ui.debug->verbosityCombobox);
-  QSignalBlocker shaderDebugCheckboxBlocker(ui.debug->shaderDebugCheckbox);
-  QSignalBlocker referenceDebugCheckboxBlocker(
-      ui.debug->referenceDebugCheckbox);
-  ui.debug->verbosityCombobox->setCurrentIndex(
-      ui.debug->verbosityCombobox->findText(tr("Default"), Qt::MatchContains));
-  ui.debug->shaderDebugCheckbox->setChecked(false);
-  ui.debug->referenceDebugCheckbox->setChecked(false);
+  QSignalBlocker verbosityComboboxBlocker(ui.debug.verbosityCombobox);
+  QSignalBlocker shaderDebugCheckboxBlocker(ui.debug.shaderDebugCheckbox);
+  QSignalBlocker referenceDebugCheckboxBlocker(ui.debug.referenceDebugCheckbox);
+  ui.debug.verbosityCombobox->setCurrentIndex(
+      ui.debug.verbosityCombobox->findText(tr("Default"), Qt::MatchContains));
+  ui.debug.shaderDebugCheckbox->setChecked(false);
+  ui.debug.referenceDebugCheckbox->setChecked(false);
 
-  ui.commandPreview->commandPreviewField->clear();
+  ui.commandPreview.commandPreviewField->clear();
 
   parseOptions();
   setDefaults();
@@ -170,5 +169,5 @@ void QtPack3rWidget::resetWidgetState() {
 }
 
 void QtPack3rWidget::updatePack3rOutput(const QByteArray &data) const {
-  ui.output->outputField->appendPlainText(data);
+  ui.output.outputField->appendPlainText(data);
 }
