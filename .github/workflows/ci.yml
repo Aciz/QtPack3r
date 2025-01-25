@@ -31,7 +31,11 @@ jobs:
         fetch-depth: 0
 
     - name: Configure CMake
-      run: cmake -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=release
+      id: cmake_config
+      run: |
+        cmake -B ${{ github.workspace }}/build
+        version=$(cmake -P ${{ github.workspace }}/cmake/get_version.cmake 2>&1)
+        echo "outputVersion=$version" >> "$GITHUB_OUTPUT"
 
     - name: Build
       run: cmake --build ${{ github.workspace }}/build --config release --parallel
@@ -39,7 +43,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: QtPack3r-linux-x64
+        name: QtPack3r-${{ steps.cmake_config.outputs.outputVersion }}-linux-x64
         path: ${{ github.workspace }}/build/QtPack3r
 
   Windows:
@@ -60,7 +64,11 @@ jobs:
         fetch-depth: 0
 
     - name: Configure CMake
-      run: cmake -B ${{ github.workspace }}/build
+      id: cmake_config
+      run: |
+        cmake -B ${{ github.workspace }}/build
+        $version=$(cmake -P ${{ github.workspace }}/cmake/get_version.cmake 2>&1)
+        "outputVersion=$version" >> $env:GITHUB_OUTPUT
 
     - name: Build
       run: cmake --build ${{ github.workspace }}/build --config release --parallel
@@ -80,5 +88,5 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: QtPack3r-win-x64
+        name: QtPack3r-${{ steps.cmake_config.outputs.outputVersion }}-win-x64
         path: ${{ github.workspace }}/build/Release
