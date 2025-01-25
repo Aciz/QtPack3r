@@ -1,16 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
-# read version from VERSION.txt
-file(READ "${CMAKE_SOURCE_DIR}/VERSION.txt" version_content)
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+include(GetVersion)
 
-string(REGEX MATCH "VERSION_MAJOR ([0-9]+)" _major_match "${version_content}")
-set(VERSION_MAJOR "${CMAKE_MATCH_1}")
-string(REGEX MATCH "VERSION_MINOR ([0-9]+)" _minor_match "${version_content}")
-set(VERSION_MINOR "${CMAKE_MATCH_1}")
-string(REGEX MATCH "VERSION_PATCH ([0-9]+)" _patch_match "${version_content}")
-set(VERSION_PATCH "${CMAKE_MATCH_1}")
-
-project(QtPack3r VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}" LANGUAGES CXX)
+# Parse version
+get_version(VERSION)
+project(QtPack3r VERSION "${VERSION}" LANGUAGES CXX)
 
 find_package(Qt6 6.2 REQUIRED COMPONENTS Core Widgets)
 

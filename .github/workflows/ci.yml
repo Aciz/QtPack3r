@@ -34,7 +34,7 @@ jobs:
       id: cmake_config
       run: |
         cmake -B ${{ github.workspace }}/build
-        version=$(cmake -P ${{ github.workspace }}/cmake/get_version.cmake 2>&1)
+        version=$(cmake -P ${{ github.workspace }}/cmake/PrintVersion.cmake 2>&1)
         echo "outputVersion=$version" >> "$GITHUB_OUTPUT"
 
     - name: Build
@@ -67,7 +67,7 @@ jobs:
       id: cmake_config
       run: |
         cmake -B ${{ github.workspace }}/build
-        $version=$(cmake -P ${{ github.workspace }}/cmake/get_version.cmake 2>&1)
+        $version=$(cmake -P ${{ github.workspace }}/cmake/PrintVersion.cmake 2>&1)
         "outputVersion=$version" >> $env:GITHUB_OUTPUT
 
     - name: Build
