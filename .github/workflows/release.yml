@@ -1,0 +1,108 @@
+name: QtPack3r Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  Linux:
+    name: Linux x64
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install qt6-base-dev libglx-dev libgl1-mesa-dev
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure CMake
+        id: cmake_config
+        run: |
+          cmake -B ${{ github.workspace }}/build
+          version=$(cmake -P ${{ github.workspace }}/cmake/PrintVersion.cmake 2>&1)
+          echo "outputVersion=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Build
+        run: cmake --build ${{ github.workspace }}/build --config release --parallel
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: QtPack3r-${{ steps.cmake_config.outputs.outputVersion }}-linux-x64
+          path: ${{ github.workspace }}/build/QtPack3r
+
+  Windows:
+    name: Windows x64
+    runs-on: windows-latest
+
+    steps:
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.1'
+          target: 'desktop'
+          cache: 'true'
+          extra: '--external 7z'
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure CMake
+        id: cmake_config
+        run: |
+          cmake -B ${{ github.workspace }}/build
+          $version=$(cmake -P ${{ github.workspace }}/cmake/PrintVersion.cmake 2>&1)
+          "outputVersion=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Build
+        run: cmake --build ${{ github.workspace }}/build --config release --parallel
+
+      - name: Deploy with WinDeployQt
+        run: |
+          windeployqt `
+          --release `
+          --force `
+          --no-translations `
+          --no-compiler-runtime `
+          --no-opengl-sw `
+          --no-system-d3d-compiler `
+          --skip-plugin-types generic,iconengines,imageformats,networkinformation `
+          "${{ github.workspace }}/build/Release/QtPack3r.exe"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: QtPack3r-${{ steps.cmake_config.outputs.outputVersion }}-win-x64
+          path: ${{ github.workspace }}/build/Release
+
+  Package:
+    runs-on: ubuntu-22.04
+    needs: [Windows, Linux]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: master
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: QtPack3r-*.zip
+          merge-multiple: false
+          path: ${{ github.workspace }}/QtPacker-release/
+
+      - name: Upload release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: QtPack3r ${{ github.ref_name }}
+          files: ${{ github.workspace }}/QtPacker-release/*.zip
+          draft: true
