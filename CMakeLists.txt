@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
-project(QtPack3r VERSION 0.0.1 LANGUAGES CXX)
+
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+include(GetVersion)
+
+# Parse version
+get_version(VERSION)
+project(QtPack3r VERSION "${VERSION}" LANGUAGES CXX)
 
 find_package(Qt6 6.2 REQUIRED COMPONENTS Core Widgets)
 
