@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(GetVersion)
+include(VersionDescription)
 
 # Parse version
 get_version(VERSION)
@@ -45,8 +46,13 @@ qt_add_executable(${CMAKE_PROJECT_NAME}
 
 )
 
-target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE QTPACK3R_VERSION="${CMAKE_PROJECT_VERSION}")
-target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE PROJECT_NAME="${CMAKE_PROJECT_NAME}")
+get_version_description(QTPACK3R_VERSION)
+
+target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
+        PROJECT_NAME="${CMAKE_PROJECT_NAME}"
+        PROJECT_VERSION="${CMAKE_PROJECT_VERSION}"
+        GIT_COMMIT_HASH="${QTPACKER_VERSION_COMMIT_HASH}"
+        GIT_COMMIT_HASH_SHORT="${QTPACKER_VERSION_COMMIT_HASH_SHORT}")
 
 target_link_libraries(${CMAKE_PROJECT_NAME}
         PRIVATE
