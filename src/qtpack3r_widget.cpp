@@ -65,6 +65,9 @@ void QtPack3rWidget::parseOptions() const {
   if (!setting.toString().isEmpty()) {
     ui.paths.pack3rPathField->setText(setting.toString());
   }
+
+  setting = preferences.readSetting(Preferences::Settings::WRAP_OUTPUT_LINES);
+  ui.output.wrapCheckbox->setChecked(setting.toBool());
 }
 
 void QtPack3rWidget::setDefaults() {
