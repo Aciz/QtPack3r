@@ -180,7 +180,8 @@ void MainWindow::buildAboutDialog() {
   header->setFont(font);
 
   const QString versionStr =
-      tr("Version %1\nBuild date %2").arg(QTPACK3R_VERSION, __DATE__);
+      tr("Version %1\nBuild date %2\nBuild commit %3")
+          .arg(PROJECT_VERSION, __DATE__, GIT_COMMIT_HASH_SHORT);
   version->setText(versionStr);
   version->setAlignment(Qt::AlignCenter);
 

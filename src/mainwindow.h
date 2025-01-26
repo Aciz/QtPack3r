@@ -24,12 +24,20 @@
 
 #pragma once
 
-#ifndef QTPACK3R_VERSION
-#define QTPACK3R_VERSION "unversioned"
-#endif
-
 #ifndef PROJECT_NAME
 #define PROJECT_NAME "QtPack3r"
+#endif
+
+#ifndef PROJECT_VERSION
+#define PROJECT_VERSION "unversioned"
+#endif
+
+#ifndef GIT_COMMIT_HASH
+#define GIT_COMMIT_HASH "n/a"
+#endif
+
+#ifndef GIT_COMMIT_HASH_SHORT
+#define GIT_COMMIT_HASH_SHORT "n/a"
 #endif
 
 #include "qtpack3r_widget.h"

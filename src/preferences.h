@@ -73,7 +73,7 @@ public:
 
 private:
   QHash<Settings, QPair<QString, QVariant>> settingsMap = {
-      {APPLICATION_VERSION, {"Application/Version", QTPACK3R_VERSION}},
+      {APPLICATION_VERSION, {"Application/Version", PROJECT_VERSION}},
       {APPLICATION_SCHEMA, {"Application/Schema", SETTINGS_SCHEMA}},
       {WINDOW_REMEMBER_SIZE, {"Window/RememberSize", true}},
       {WINDOW_WIDTH, {"Window/Width", -1}},
