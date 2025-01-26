@@ -155,7 +155,7 @@ void MainWindow::setupHelpMenu() {
 void MainWindow::buildAboutDialog() {
   aboutDialog = new QDialog(this);
   aboutDialog->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  aboutDialog->setMinimumSize(450, 450);
+  aboutDialog->setMinimumSize(500, 500);
   aboutDialog->setMaximumSize(aboutDialog->minimumSize());
 
   // cleanup on close
@@ -181,7 +181,7 @@ void MainWindow::buildAboutDialog() {
 
   const QString versionStr =
       tr("Version %1\nBuild date %2\nBuild commit %3")
-          .arg(PROJECT_VERSION, __DATE__, GIT_COMMIT_HASH_SHORT);
+          .arg(PROJECT_VERSION, __DATE__, GIT_COMMIT_HASH);
   version->setText(versionStr);
   version->setAlignment(Qt::AlignCenter);
 
