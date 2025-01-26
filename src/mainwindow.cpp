@@ -185,6 +185,7 @@ void MainWindow::buildAboutDialog() {
   version->setText(versionStr);
   version->setAlignment(Qt::AlignCenter);
   version->setTextInteractionFlags(Qt::TextSelectableByMouse);
+  version->setCursor(QCursor(Qt::IBeamCursor));
 
   const QPixmap logo(logoPath);
   logoLabel->setFixedSize(100, 100);
