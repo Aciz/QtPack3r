@@ -30,21 +30,33 @@
 
 // TODO: support PATH env variable for discovering Pack3r executable?
 QString QtPack3rWidget::getPack3rPath() {
-  return NATIVE_GETFILE(this, tr("Find Pack3r executable"), QDir::homePath(),
+  const QString path =
+      preferences.readSetting(Preferences::Settings::PACK3R_PATH).toString();
+  QString pack3rPath;
+
+  if (path.isEmpty()) {
+    pack3rPath = QDir::homePath();
+  } else {
+    auto splits = path.split(NATIVE_PATHSEP);
+    splits.removeLast();
+    pack3rPath = splits.join(NATIVE_PATHSEP);
+  }
+
+  return NATIVE_GETFILE(this, tr("Find Pack3r executable"), pack3rPath,
                         QString());
 }
 
 QString QtPack3rWidget::getMapFile() {
-  const QVariant path =
-      preferences.readSetting(Preferences::Settings::MAPS_PATH);
+  const QString path =
+      preferences.readSetting(Preferences::Settings::MAPS_PATH).toString();
 
   QString mapsPath;
 
-  if (path.toString().isEmpty()) {
+  if (path.isEmpty()) {
     mapsPath = QDir::homePath();
     ui.paths.defaultMapPathSet = false;
   } else {
-    mapsPath = path.toString();
+    mapsPath = path;
     ui.paths.defaultMapPathSet = true;
   }
 
@@ -53,19 +65,19 @@ QString QtPack3rWidget::getMapFile() {
 }
 
 QString QtPack3rWidget::getOutputPath() {
-  const QVariant path =
-      preferences.readSetting(Preferences::Settings::MAPS_PATH);
-  const QString mapsPath =
-      !path.toString().isEmpty() ? path.toString() : QDir::homePath();
+  const QString path =
+      preferences.readSetting(Preferences::Settings::MAPS_PATH).toString();
+  const QString mapsPath = !path.isEmpty() ? path : QDir::homePath();
 
   return NATIVE_GETDIR(this, tr("Choose output directory"), mapsPath,
                        QFileDialog::ShowDirsOnly);
 }
 
 void QtPack3rWidget::findPack3r() {
-  ui.paths.pack3rPathField->setText(getPack3rPath());
+  const QString path = getPack3rPath();
 
-  if (!ui.paths.pack3rPathField->text().isEmpty()) {
+  if (!path.isEmpty()) {
+    ui.paths.pack3rPathField->setText(path);
     preferences.writeSetting(Preferences::Settings::PACK3R_PATH,
                              ui.paths.pack3rPathField->text());
     updateCommandPreview();
