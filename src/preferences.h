@@ -62,6 +62,7 @@ public:
     WINDOW_HEIGHT,
     PACK3R_PATH,
     MAPS_PATH,
+    WRAP_OUTPUT_LINES,
 
     NUM_SETTINGS // endcap
   };
@@ -79,7 +80,8 @@ private:
       {WINDOW_WIDTH, {"Window/Width", -1}},
       {WINDOW_HEIGHT, {"Window/Height", -1}},
       {PACK3R_PATH, {"Paths/Pack3rPath", ""}},
-      {MAPS_PATH, {"Paths/MapsPath", ""}}};
+      {MAPS_PATH, {"Paths/MapsPath", ""}},
+      {WRAP_OUTPUT_LINES, {"Interface/WrapOutputLines", false}}};
 
   QString preferencesFile;
 };

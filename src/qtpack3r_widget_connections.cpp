@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+#include "preferences.h"
 #include "qtpack3r_widget.h"
 
 void QtPack3rWidget::setupConnections() {
@@ -137,6 +138,8 @@ void QtPack3rWidget::setupOutputConnections() {
                               ? QTextOption::WrapAtWordBoundaryOrAnywhere
                               : QTextOption::NoWrap;
     ui.output.outputField->setWordWrapMode(wrapMode);
+    preferences.writeSetting(Preferences::Settings::WRAP_OUTPUT_LINES,
+                             ui.output.wrapCheckbox->isChecked());
   });
 
   connect(ui.output.copyButton, &QPushButton::released, this,
