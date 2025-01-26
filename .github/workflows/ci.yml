@@ -4,16 +4,24 @@ on:
   workflow_dispatch:
   push:
     branches: [ "master" ]
+    tags-ignore:
+      - '*'
     paths-ignore:
       - .gitignore
       - .clang-format
+      - scripts/*
       - README.md
+      - BUILDING.md
+      - VERSION.txt
   pull_request:
     branches: [ "master" ]
     paths-ignore:
       - .gitignore
       - .clang-format
+      - scripts/*
       - README.md
+      - BUILDING.md
+      - VERSION.txt
 
 jobs:
   Linux:
