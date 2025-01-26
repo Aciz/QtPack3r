@@ -12,24 +12,26 @@
 * Persistent configuration for Pack3r and mapping install locations
 
 # Installation
-Pre-built binaries are available on the releases page (soontm)
+Pre-built binaries are available on the [releases page](https://github.com/Aciz/QtPack3r/releases).
+
+Note that this repository only provides a user interface, it does **NOT** contain Pack3r itself. You must download it separately.
 
 ## Dependencies
 ### Windows
 * Make sure [Visual C++ Redistributable 2022 64-bit](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version) is installed
 ### Linux
 * Install Qt6 with your distributions package manager
-  * Requires **Qt 6.2** or newer
+    * Requires **Qt 6.2** or newer
 
- # Planned features in the future
- * Drag & drop importing for maps
- * Proper theme support - currently Windows follows system light/dark preference, Linux uses `QT_QPA_PLATFORMTHEME`
-   * Can be overridden with startup options or environmental variables, see [QStyle](https://doc.qt.io/qt-6/qstyle.html#details) and [QGuiApplication](https://doc.qt.io/qt-6/qguiapplication.html#supported-command-line-options) documentation
- * Ability to save option combinations as presets
- * Colored output for Pack3r's output
+# Planned features in the future
+* Drag & drop importing for maps
+* Proper theme support - currently Windows follows system light/dark preference, Linux uses `QT_QPA_PLATFORMTHEME`
+    * Can be overridden with startup options or environmental variables, see [QStyle](https://doc.qt.io/qt-6/qstyle.html#details) and [QGuiApplication](https://doc.qt.io/qt-6/qguiapplication.html#supported-command-line-options) documentation
+* Ability to save option combinations as presets
+* Colored output for Pack3r's output
 
 # Building
-TODO
+See [BUILDING.md](BUILDING.md).
 
 # Screenshot
 <p align="center">
