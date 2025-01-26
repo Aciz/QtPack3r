@@ -31,11 +31,14 @@ jobs:
       - name: Build
         run: cmake --build ${{ github.workspace }}/build --config release --parallel
 
+      - name: Create archive
+        run: 7z a -r QtPack3r-${{ steps.cmake_config.outputs.outputVersion }}-linux-x64.zip ${{ github.workspace }}/build/QtPack3r
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: QtPack3r-${{ steps.cmake_config.outputs.outputVersion }}-linux-x64
-          path: ${{ github.workspace }}/build/QtPack3r
+          path: ${{ github.workspace }}/QtPack3r-${{ steps.cmake_config.outputs.outputVersion }}-linux-x64.zip
 
   Windows:
     name: Windows x64
@@ -76,13 +79,16 @@ jobs:
           --skip-plugin-types generic,iconengines,imageformats,networkinformation `
           "${{ github.workspace }}/build/Release/QtPack3r.exe"
 
+      - name: Create archive
+        run: 7z a -r QtPack3r-${{ steps.cmake_config.outputs.outputVersion }}-win-x64.zip ${{ github.workspace }}/build/Release/*
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: QtPack3r-${{ steps.cmake_config.outputs.outputVersion }}-win-x64
-          path: ${{ github.workspace }}/build/Release
+          path: ${{ github.workspace }}/QtPack3r-${{ steps.cmake_config.outputs.outputVersion }}-win-x64.zip
 
-  Package:
+  Publish:
     runs-on: ubuntu-22.04
     needs: [Windows, Linux]
 
@@ -95,7 +101,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          pattern: QtPack3r-*.zip
+          pattern: QtPack3r-*
           merge-multiple: false
           path: ${{ github.workspace }}/QtPack3r-release/
 
@@ -104,5 +110,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: QtPack3r ${{ github.ref_name }}
-          files: ${{ github.workspace }}/QtPack3r-release/*.zip
+          files: ${{ github.workspace }}/QtPack3r-release/*/*
           draft: true
