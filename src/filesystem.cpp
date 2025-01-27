@@ -45,6 +45,14 @@ QString FileSystem::getPack3rPath(const QString &defaultPath) {
   if (ret == QDialog::Accepted) {
     const QString selectedFile = fileDialog.selectedFiles().first();
 
+    if (!selectedFile.endsWith(PACK3R_EXECUTABLE, Qt::CaseInsensitive)) {
+      QMessageBox dialog{};
+      Dialog::setupMessageBox(dialog,
+                              Dialog::MessageBox::INVALID_PACK3R_BINARY);
+      dialog.exec();
+      return {};
+    }
+
 #ifdef Q_OS_WINDOWS
     return QDir::toNativeSeparators(selectedFile);
 #else

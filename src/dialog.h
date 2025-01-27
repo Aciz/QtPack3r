@@ -36,6 +36,7 @@ public:
     SAVE_MAPS_PATH,
     PACK3R_RUN_ERROR, // does NOT call setText() nor setInformativeText()
     RESET_PREFERENCES,
+    INVALID_PACK3R_BINARY,
   };
 
   static void setupMessageBox(QMessageBox &messageBox, MessageBox type);
@@ -46,4 +47,5 @@ private:
   static void setupSaveMapsPathMessageBox(QMessageBox &messageBox);
   static void setupPack3rRunErrorMessageBox(QMessageBox &messageBox);
   static void setupResetPreferencesMessageBox(QMessageBox &messageBox);
+  static void setupInvalidPack3rBinaryMessageBox(QMessageBox &messageBox);
 };

@@ -46,6 +46,9 @@ void Dialog::setupMessageBox(QMessageBox &messageBox, const MessageBox type) {
   case RESET_PREFERENCES:
     setupResetPreferencesMessageBox(messageBox);
     break;
+  case INVALID_PACK3R_BINARY:
+    setupInvalidPack3rBinaryMessageBox(messageBox);
+    break;
   default:
     break;
   }
@@ -93,5 +96,15 @@ void Dialog::setupResetPreferencesMessageBox(QMessageBox &messageBox) {
   messageBox.setText(tr("This will reset all preferences to default values."));
   messageBox.setInformativeText(tr("Are you sure you want to continue?"));
   messageBox.setStandardButtons(QMessageBox::No | QMessageBox::Yes);
+  messageBox.setWindowModality(Qt::ApplicationModal);
+}
+
+void Dialog::setupInvalidPack3rBinaryMessageBox(QMessageBox &messageBox) {
+  messageBox.setWindowTitle(tr("Invalid file selected"));
+  messageBox.setIcon(QMessageBox::Critical);
+  messageBox.setText(tr("Invalid Pack3r executable"));
+  messageBox.setInformativeText(
+      tr("The selected file does not appear to be a valid Pack3r executable. "
+         "Please select a different file."));
   messageBox.setWindowModality(Qt::ApplicationModal);
 }
