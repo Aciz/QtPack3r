@@ -27,8 +27,39 @@
 
 // TODO: support PATH env variable for discovering Pack3r executable?
 QString FileSystem::getPack3rPath(const QString &defaultPath) {
-  return NATIVE_GETFILE(nullptr, tr("Find Pack3r executable"),
-                        getDefaultPath(defaultPath), QString());
+  QFileDialog fileDialog{};
+  fileDialog.setWindowTitle(tr("Find Pack3r executable"));
+  fileDialog.setFileMode(QFileDialog::ExistingFile);
+  fileDialog.setDirectory(getDefaultPath(defaultPath));
+
+  // on Windows, we can apply a .exe filter, but Linux needs to allow
+  // all files, and later check for an executable flag
+#ifdef Q_OS_WINDOWS
+  fileDialog.setNameFilter(tr("Executable files (*.exe)"));
+#else
+  fileDialog.setNameFilter(tr("All files (*)"));
+#endif
+
+  const int ret = fileDialog.exec();
+
+  if (ret == QDialog::Accepted) {
+    const QString selectedFile = fileDialog.selectedFiles().first();
+
+#ifdef Q_OS_WINDOWS
+    return QDir::toNativeSeparators(selectedFile);
+#else
+    const QFileInfo fileInfo(selectedFile);
+
+    if (fileInfo.isExecutable()) {
+      return QDir::toNativeSeparators(selectedFile);
+    } else {
+      QMessageBox::critical(nullptr, "Invalid file",
+                            "The selected file is not an executable file.");
+    }
+#endif
+  }
+
+  return {};
 }
 
 QString FileSystem::getMapPath(const QString &defaultPath) {
