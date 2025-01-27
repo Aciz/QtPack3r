@@ -215,16 +215,8 @@ void PreferencesDialog::setupConnections() {
   connect(closeButton, &QPushButton::released, this,
           [&] { preferencesDialog->close(); });
 
-  connect(resetDefaultsButton, &QPushButton::released, this, [&] {
-    QMessageBox dialog{};
-    Dialog::setupMessageBox(dialog, Dialog::RESET_PREFERENCES);
-
-    const int ret = dialog.exec();
-
-    if (ret == QMessageBox::Yes) {
-      preferences.writeDefaults(true);
-    }
-  });
+  connect(resetDefaultsButton, &QPushButton::released, this,
+          &PreferencesDialog::restoreDefaults);
 
   setupInterfacePageConnections();
   setupPathsPageConnections();
@@ -267,4 +259,26 @@ void PreferencesDialog::setupPathsPageConnections() {
     preferences.writeSetting(Preferences::Settings::PACK3R_PATH,
                              pathsPage.pack3rPathField->text());
   });
+}
+
+// TODO: once this dialog is part of the Preferences class,
+//  we should read values from 'settingsMap' to grab these defaults.
+//  For now, this is just hardcoded which is kinda bleh but whatever,
+//  this is fine for now with the amount of settings we have
+void PreferencesDialog::resetPreferencesDialogWidget() const {
+  interfacePage.windowSizeCheckbox->setChecked(true);
+  pathsPage.pack3rPathField->clear();
+  pathsPage.mapsPathField->clear();
+}
+
+void PreferencesDialog::restoreDefaults() const {
+  QMessageBox dialog{};
+  Dialog::setupMessageBox(dialog, Dialog::RESET_PREFERENCES);
+
+  const int ret = dialog.exec();
+
+  if (ret == QMessageBox::Yes) {
+    preferences.writeDefaults(true);
+    resetPreferencesDialogWidget();
+  }
 }

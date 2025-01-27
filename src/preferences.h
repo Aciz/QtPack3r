@@ -107,6 +107,8 @@ private:
   void setupInterfacePageConnections();
   void setupPathsPageConnections();
 
+  void resetPreferencesDialogWidget() const;
+
   struct InterfacePage {
     QWidget *widget{};
     QVBoxLayout *widgetLayout{};
@@ -147,4 +149,7 @@ private:
   QPushButton *closeButton{};
 
   QGridLayout *layout{};
+
+private slots:
+  void restoreDefaults() const;
 };
