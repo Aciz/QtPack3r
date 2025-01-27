@@ -131,6 +131,9 @@ private:
   void replaceMapFileExtension(QString &str) const;
   void updateOutputExtension() const;
 
+  void dragEnterEvent(QDragEnterEvent *event) override;
+  void dropEvent(QDropEvent *event) override;
+
   const QString noScanDefaultStr = "pak1.pk3 pak2.pk3 mp_bin.pk3";
   const QString noPackDefaultStr =
       "pak0.pk3 pak0.pk3dir lights.pk3 sd-mapobjects.pk3 common.pk3 "
