@@ -31,6 +31,7 @@
 #include "dialog.h"
 #include "preferences.h"
 
+#include <QMimeData>
 #include <QSignalBlocker>
 
 QtPack3rWidget::QtPack3rWidget(QWidget *parent) : QWidget(parent) {
@@ -46,6 +47,8 @@ QtPack3rWidget::QtPack3rWidget(QWidget *parent) : QWidget(parent) {
   parseOptions();
   setDefaults();
   updateCommandPreview();
+
+  setAcceptDrops(true);
 }
 
 void QtPack3rWidget::setupCommands() {
@@ -75,6 +78,25 @@ void QtPack3rWidget::setDefaults() {
   pack3rCommands[NOPACK].second.value = ui.options.noPackField->text();
   pack3rCommands[VERBOSITY].second.value =
       ui.debug.verbosityCombobox->currentText().toLower();
+}
+
+void QtPack3rWidget::dragEnterEvent(QDragEnterEvent *event) {
+  // map files are text/plain mime type
+  if (event->mimeData()->hasText() && event->mimeData()->hasUrls()) {
+    event->acceptProposedAction();
+  }
+}
+
+void QtPack3rWidget::dropEvent(QDropEvent *event) {
+  // toLocalFile() always returns forward slashes
+  const QString file =
+      QDir::toNativeSeparators(event->mimeData()->urls().first().toLocalFile());
+
+  if (file.endsWith(".map") || file.endsWith(".reg")) {
+    ui.paths.mapPathField->setText(file);
+    autoFillOutputPath(file);
+    updateCommandPreview();
+  }
 }
 
 bool QtPack3rWidget::canRunPack3r() const {
