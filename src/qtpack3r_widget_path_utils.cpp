@@ -24,57 +24,15 @@
 
 // pack3r_widget_filesystem.cpp - filesystem interactions
 
-#include "dialog.h"
-#include "preferences.h"
 #include "qtpack3r_widget.h"
 
-// TODO: support PATH env variable for discovering Pack3r executable?
-QString QtPack3rWidget::getPack3rPath() {
-  const QString path =
-      preferences.readSetting(Preferences::Settings::PACK3R_PATH).toString();
-  QString pack3rPath;
-
-  if (path.isEmpty()) {
-    pack3rPath = QDir::homePath();
-  } else {
-    auto splits = path.split(NATIVE_PATHSEP);
-    splits.removeLast();
-    pack3rPath = splits.join(NATIVE_PATHSEP);
-  }
-
-  return NATIVE_GETFILE(this, tr("Find Pack3r executable"), pack3rPath,
-                        QString());
-}
-
-QString QtPack3rWidget::getMapFile() {
-  const QString path =
-      preferences.readSetting(Preferences::Settings::MAPS_PATH).toString();
-
-  QString mapsPath;
-
-  if (path.isEmpty()) {
-    mapsPath = QDir::homePath();
-    ui.paths.defaultMapPathSet = false;
-  } else {
-    mapsPath = path;
-    ui.paths.defaultMapPathSet = true;
-  }
-
-  return NATIVE_GETFILE(this, tr("Open map file"), mapsPath,
-                        tr("Radiant map files (*.map *.reg)"));
-}
-
-QString QtPack3rWidget::getOutputPath() {
-  const QString path =
-      preferences.readSetting(Preferences::Settings::MAPS_PATH).toString();
-  const QString mapsPath = !path.isEmpty() ? path : QDir::homePath();
-
-  return NATIVE_GETDIR(this, tr("Choose output directory"), mapsPath,
-                       QFileDialog::ShowDirsOnly);
-}
+#include "dialog.h"
+#include "filesystem.h"
+#include "preferences.h"
 
 void QtPack3rWidget::findPack3r() {
-  const QString path = getPack3rPath();
+  const QString path = FileSystem::getPack3rPath(
+      preferences.readSetting(Preferences::Settings::PACK3R_PATH).toString());
 
   if (!path.isEmpty()) {
     ui.paths.pack3rPathField->setText(path);
@@ -85,7 +43,11 @@ void QtPack3rWidget::findPack3r() {
 }
 
 void QtPack3rWidget::openMap() {
-  const QString path = getMapFile();
+  const QString defaultPath =
+      preferences.readSetting(Preferences::Settings::MAPS_PATH).toString();
+  ui.paths.defaultMapPathSet = !defaultPath.isEmpty();
+
+  const QString path = FileSystem::getMapPath(defaultPath);
 
   if (path.isEmpty()) {
     return;
@@ -127,7 +89,8 @@ void QtPack3rWidget::openMap() {
 }
 
 void QtPack3rWidget::setOutput() {
-  QString path = getOutputPath();
+  QString path = FileSystem::getOutputPath(
+      preferences.readSetting(Preferences::Settings::MAPS_PATH).toString());
 
   if (path.isEmpty()) {
     return;

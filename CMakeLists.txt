@@ -41,6 +41,8 @@ qt_add_executable(${CMAKE_PROJECT_NAME}
         src/dialog.h
         src/preferences.cpp
         src/preferences.h
+        src/filesystem.cpp
+        src/filesystem.h
         ${app_icon_resource_windows}
         resources/QtPack3r.qrc
 

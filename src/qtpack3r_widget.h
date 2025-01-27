@@ -55,13 +55,6 @@
 #define MONOSPACE_FONT QFont("Consolas")
 #endif
 
-#define NATIVE_GETFILE(parent, caption, dir, filter)                           \
-  QDir::toNativeSeparators(                                                    \
-      QFileDialog::getOpenFileName(parent, caption, dir, filter))
-#define NATIVE_GETDIR(parent, caption, dir, filter)                            \
-  QDir::toNativeSeparators(                                                    \
-      QFileDialog::getExistingDirectory(parent, caption, dir, filter))
-
 class QtPack3rWidget : public QWidget {
   Q_OBJECT
 
@@ -137,10 +130,6 @@ private:
   static bool isValidMapPath(const QString &path);
   void replaceMapFileExtension(QString &str) const;
   void updateOutputExtension() const;
-
-  QString getPack3rPath();
-  QString getMapFile();
-  QString getOutputPath();
 
   const QString noScanDefaultStr = "pak1.pk3 pak2.pk3 mp_bin.pk3";
   const QString noPackDefaultStr =

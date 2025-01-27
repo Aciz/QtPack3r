@@ -23,6 +23,8 @@
  */
 
 #include "preferences.h"
+
+#include "filesystem.h"
 #include "qtpack3r_widget.h"
 
 #include <QApplication>
@@ -237,18 +239,12 @@ void PreferencesDialog::setupInterfacePageConnections() {
 
 void PreferencesDialog::setupPathsPageConnections() {
   connect(pathsPage.mapsPathAction, &QAction::triggered, this, [&] {
-    const QString currentPath =
-        preferences.readSetting(Preferences::Settings::MAPS_PATH).toString();
-    const QString mapsPath =
-        !currentPath.isEmpty() ? currentPath : QDir::homePath();
+    const QString path = FileSystem::getMappingPath(
+        preferences.readSetting(Preferences::Settings::MAPS_PATH).toString());
 
-    const QString newPath =
-        NATIVE_GETDIR(this, tr("Choose mapping install location"), mapsPath,
-                      QFileDialog::ShowDirsOnly);
-
-    if (!newPath.isEmpty()) {
-      preferences.writeSetting(Preferences::Settings::MAPS_PATH, newPath);
-      pathsPage.mapsPathField->setText(newPath);
+    if (!path.isEmpty()) {
+      preferences.writeSetting(Preferences::Settings::MAPS_PATH, path);
+      pathsPage.mapsPathField->setText(path);
     }
   });
 
@@ -258,17 +254,12 @@ void PreferencesDialog::setupPathsPageConnections() {
   });
 
   connect(pathsPage.pack3rPathAction, &QAction::triggered, this, [&] {
-    const QString currentPath =
-        preferences.readSetting(Preferences::Settings::PACK3R_PATH).toString();
-    const QString pack3rPath =
-        !currentPath.isEmpty() ? currentPath : QDir::homePath();
+    const QString path = FileSystem::getPack3rPath(
+        preferences.readSetting(Preferences::Settings::PACK3R_PATH).toString());
 
-    const QString newPath = NATIVE_GETFILE(this, tr("Find Pack3r executable"),
-                                           pack3rPath, QString());
-
-    if (!newPath.isEmpty()) {
-      preferences.writeSetting(Preferences::Settings::PACK3R_PATH, newPath);
-      pathsPage.pack3rPathField->setText(newPath);
+    if (!path.isEmpty()) {
+      preferences.writeSetting(Preferences::Settings::PACK3R_PATH, path);
+      pathsPage.pack3rPathField->setText(path);
     }
   });
 
