@@ -26,13 +26,6 @@ Note that this repository only provides a user interface, it does **NOT** contai
 # Reporting issues
 If you encounter a bug while using QtPack3r, before making a bug report, please ensure that the issue is with QtPack3r itself and not Pack3r. If you're having trouble executing commands, or the results of an executed command is not what you expect, try running the command directly from the command line. The UI provides a copy button next to the command preview for a convenient way to copy the current command. If the issue you're experiencing persist while running the command directly, it's likely an issue with Pack3r itself, and you should [report the bug there](https://github.com/ovska/Pack3r/issues).
 
-# Planned features in the future
-* Drag & drop importing for maps
-* Proper theme support - currently Windows follows system light/dark preference, Linux uses `QT_QPA_PLATFORMTHEME`
-    * Can be overridden with startup options or environmental variables, see [QStyle](https://doc.qt.io/qt-6/qstyle.html#details) and [QGuiApplication](https://doc.qt.io/qt-6/qguiapplication.html#supported-command-line-options) documentation
-* Ability to save option combinations as presets
-* Colored output for Pack3r's output
-
 # Building
 See [BUILDING.md](BUILDING.md).
 
