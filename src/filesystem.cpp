@@ -30,7 +30,26 @@ QString FileSystem::getPack3rPath(const QString &defaultPath) {
   QFileDialog fileDialog{};
   fileDialog.setWindowTitle(tr("Find Pack3r executable"));
   fileDialog.setFileMode(QFileDialog::ExistingFile);
-  fileDialog.setDirectory(getDefaultPath(defaultPath));
+
+  // Because the input here is the executable file, what we get is not actually
+  // a path, but a filename. On Linux, due to a lack of file extension,
+  // this means that the dialog tries to open a directory called Pack3r
+  // from the directory where the executable is, which usually breaks
+  // the file picker state initially, before a valid directory is selected.
+  // Windows handles this gracefully and gives us the directory containing
+  // Pack3r.exe even if we end the path with the filename, but let's properly
+  // strip the executable name from the end and use the actual directory.
+
+  // Note: use 'toNativeSeparators' here, because the input is the path
+  // saved into settings, which DOES use native path separators
+  if (defaultPath.endsWith(QDir::toNativeSeparators(PACK3R_EXECUTABLE),
+                           Qt::CaseInsensitive)) {
+    auto splits = defaultPath.split(NATIVE_PATHSEP);
+    splits.removeLast();
+    fileDialog.setDirectory(splits.join(NATIVE_PATHSEP));
+  } else {
+    fileDialog.setDirectory(QDir::homePath());
+  }
 
   // on Windows, we can apply a .exe filter, but Linux needs to allow
   // all files, and later check for an executable flag
