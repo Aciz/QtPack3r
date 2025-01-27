@@ -46,8 +46,6 @@
 #define PREFERENCES_FILENAME "preferences.conf"
 #endif
 
-#define NATIVE_PATHSEP QDir::toNativeSeparators("/")
-
 #define SETTINGS_SCHEMA "v1"
 
 class Preferences : public QObject {
