@@ -36,6 +36,14 @@
 
 #define NATIVE_PATHSEP QDir::toNativeSeparators("/")
 
+#ifdef Q_OS_WINDOWS
+// QFileDialog returns forward slashes on Windows too,
+// so we don't use native path separators here
+#define PACK3R_EXECUTABLE "/Pack3r.exe"
+#else
+#define PACK3R_EXECUTABLE "/Pack3r"
+#endif
+
 class FileSystem : public QObject {
 public:
   static QString getPack3rPath(const QString &defaultPath);
