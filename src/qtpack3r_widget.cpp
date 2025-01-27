@@ -93,6 +93,13 @@ void QtPack3rWidget::dropEvent(QDropEvent *event) {
       QDir::toNativeSeparators(event->mimeData()->urls().first().toLocalFile());
 
   if (file.endsWith(".map") || file.endsWith(".reg")) {
+    if (!isValidMapPath(file)) {
+      QMessageBox dialog{};
+      Dialog::setupMessageBox(dialog, Dialog::INVALID_MAP_PATH);
+      dialog.exec();
+      return;
+    }
+
     ui.paths.mapPathField->setText(file);
     autoFillOutputPath(file);
     updateCommandPreview();
