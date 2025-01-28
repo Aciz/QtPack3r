@@ -52,6 +52,4 @@ public:
   static QString getOutputPath(const QString &defaultPath);
 
   static QString getDefaultPath(const QString &defaultPath);
-  // if silent is true, just checks for validity without creating a dialog
-  static bool isValidPack3rBinary(const QString &file, bool silent = false);
 };
