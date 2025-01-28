@@ -37,6 +37,9 @@ void QtPack3rWidget::setupPathsConnections() {
   connect(ui.paths.pack3rPathAction, &QAction::triggered, this,
           &QtPack3rWidget::findPack3r);
 
+  connect(preferencesDialog, &PreferencesDialog::pack3rPathChanged, this,
+          &QtPack3rWidget::updatePack3rPath);
+
   connect(ui.paths.mapPathAction, &QAction::triggered, this,
           &QtPack3rWidget::openMap);
 

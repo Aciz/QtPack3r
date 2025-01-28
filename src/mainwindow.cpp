@@ -34,7 +34,10 @@
 inline constexpr int DEFAULT_WIDTH = 800;
 inline constexpr int DEFAULT_HEIGHT = 800;
 
-MainWindow::MainWindow() : qtPack3rwidget(new QtPack3rWidget(this)) {
+MainWindow::MainWindow() {
+  preferencesDialog = new PreferencesDialog(this);
+  qtPack3rwidget = new QtPack3rWidget(this, preferencesDialog);
+
   setupGeometry();
   setupMenuBar();
   setCentralWidget(qtPack3rwidget);
@@ -229,10 +232,13 @@ void MainWindow::buildAboutDialog() {
   layout->addLayout(buttonLayout, 0);
 }
 
-void MainWindow::openPreferences() {
-  PreferencesDialog preferencesDialog{};
-  preferencesDialog.buildPreferencesDialog();
-  preferencesDialog.preferencesDialog->exec();
+void MainWindow::openPreferences() const {
+  if (!preferencesDialog->dialog) {
+    preferencesDialog->buildPreferencesDialog();
+  }
+
+  preferencesDialog->setInitialState();
+  preferencesDialog->dialog->exec();
 }
 
 void MainWindow::openAboutWindow() {

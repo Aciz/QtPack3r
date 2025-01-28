@@ -96,8 +96,15 @@ class PreferencesDialog : public QWidget {
   Q_OBJECT
 
 public:
+  explicit PreferencesDialog(QWidget *parent);
+
   void buildPreferencesDialog();
-  QDialog *preferencesDialog{};
+  void setInitialState();
+
+  QDialog *dialog{};
+
+signals:
+  void pack3rPathChanged(const QString &newPath);
 
 private:
   void buildInterfacePage();
@@ -128,6 +135,7 @@ private:
 
     QLabel *pack3rPathLabel{};
     QLineEdit *pack3rPathField{};
+    QString oldPack3rPath{};
     QAction *pack3rPathAction{};
 
     QLabel *mapsPathLabel{};

@@ -26,6 +26,7 @@
 
 #include "pack3r_output_parser.h"
 #include "pack3r_process_handler.h"
+#include "preferences.h"
 
 #include <QApplication>
 #include <QButtonGroup>
@@ -59,7 +60,8 @@ class QtPack3rWidget : public QWidget {
   Q_OBJECT
 
 public:
-  explicit QtPack3rWidget(QWidget *parent);
+  QtPack3rWidget(QWidget *parent,
+                 const QPointer<PreferencesDialog> &preferencesDialogPtr);
 
 public slots:
   void findPack3r();
@@ -142,6 +144,7 @@ private:
   QClipboard *clipboard{};
   Pack3rProcessHandler *processHandler;
   QPointer<Pack3rOutputParser> outputParser;
+  QPointer<PreferencesDialog> preferencesDialog;
 
   QGridLayout *layout{};
 
@@ -251,4 +254,5 @@ private slots:
   void updatePack3rOutput(const QByteArray &data) const;
   void copyFieldToClipboard(const QPlainTextEdit *field) const;
   void resetWidgetState();
+  void updatePack3rPath(const QString &newPath);
 };

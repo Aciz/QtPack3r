@@ -85,24 +85,25 @@ void Preferences::writeDefaults(const bool restoreDefaults) {
   }
 }
 
+PreferencesDialog::PreferencesDialog(QWidget *parent) : QWidget(parent) {}
+
 void PreferencesDialog::buildPreferencesDialog() {
-  preferencesDialog = new QDialog(this);
-  preferencesDialog->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  preferencesDialog->setMinimumSize(700, 500);
-  preferencesDialog->setMaximumSize(preferencesDialog->minimumSize());
+  dialog = new QDialog(this);
+  dialog->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  dialog->setMinimumSize(700, 500);
+  dialog->setMaximumSize(dialog->minimumSize());
 
-  preferencesDialog->setWindowTitle(tr("Preferences"));
-  preferencesDialog->setWindowModality(Qt::ApplicationModal);
-  preferencesDialog->setAttribute(Qt::WA_DeleteOnClose);
+  dialog->setWindowTitle(tr("Preferences"));
+  dialog->setWindowModality(Qt::ApplicationModal);
 
-  pageList = new QListWidget(preferencesDialog);
+  pageList = new QListWidget(this);
   interfaceItem = new QListWidgetItem(tr("Interface"), pageList);
   pathsItem = new QListWidgetItem(tr("Paths"), pageList);
 
   pageList->addItem(interfaceItem);
   pageList->addItem(pathsItem);
 
-  pages = new QStackedWidget(preferencesDialog);
+  pages = new QStackedWidget(this);
 
   buildInterfacePage();
   buildPathsPage();
@@ -110,11 +111,10 @@ void PreferencesDialog::buildPreferencesDialog() {
   pages->insertWidget(0, interfacePage.widget);
   pages->insertWidget(1, pathsPage.widget);
 
-  resetDefaultsButton =
-      new QPushButton(tr("Reset to defaults"), preferencesDialog);
+  resetDefaultsButton = new QPushButton(tr("Reset to defaults"), this);
   closeButton = new QPushButton(
       QApplication::style()->standardIcon(QStyle::SP_DialogCloseButton),
-      tr("Close"), preferencesDialog);
+      tr("Close"), this);
 
   buttonLayout = new QHBoxLayout;
   buttonLayout->addWidget(resetDefaultsButton);
@@ -128,13 +128,18 @@ void PreferencesDialog::buildPreferencesDialog() {
   layout->setColumnStretch(0, 1);
   layout->setColumnStretch(1, 4);
 
-  preferencesDialog->setLayout(layout);
+  dialog->setLayout(layout);
 
   setupConnections();
 }
+void PreferencesDialog::setInitialState() {
+  pageList->setCurrentRow(0);
+  pages->setCurrentIndex(pageList->currentRow());
+  pathsPage.oldPack3rPath = pathsPage.pack3rPathField->text();
+}
 
 void PreferencesDialog::buildInterfacePage() {
-  interfacePage.widget = new QWidget(preferencesDialog);
+  interfacePage.widget = new QWidget(dialog);
   interfacePage.groupBox = new QGroupBox(tr("Interface"), interfacePage.widget);
 
   interfacePage.windowSizeCheckbox =
@@ -154,7 +159,7 @@ void PreferencesDialog::buildInterfacePage() {
 }
 
 void PreferencesDialog::buildPathsPage() {
-  pathsPage.widget = new QWidget(preferencesDialog);
+  pathsPage.widget = new QWidget(dialog);
   pathsPage.groupBox = new QGroupBox(tr("Paths"), pathsPage.widget);
 
   const QString pack3rPathTooltip = tr("Location of Pack3r executable");
@@ -212,11 +217,16 @@ void PreferencesDialog::setupConnections() {
   connect(pageList, &QListWidget::currentRowChanged, this,
           [&] { pages->setCurrentIndex(pageList->currentRow()); });
 
-  connect(closeButton, &QPushButton::released, this,
-          [&] { preferencesDialog->close(); });
+  connect(closeButton, &QPushButton::released, this, [&] { dialog->close(); });
 
   connect(resetDefaultsButton, &QPushButton::released, this,
           &PreferencesDialog::restoreDefaults);
+
+  connect(dialog, &QDialog::finished, this, [&] {
+    if (pathsPage.oldPack3rPath != pathsPage.pack3rPathField->text()) {
+      emit pack3rPathChanged(pathsPage.pack3rPathField->text());
+    }
+  });
 
   setupInterfacePageConnections();
   setupPathsPageConnections();
