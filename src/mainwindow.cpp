@@ -215,6 +215,7 @@ void MainWindow::buildAboutDialog() {
   const auto closeButton = buttonBox->addButton(QDialogButtonBox::Close);
   connect(closeButton, &QPushButton::released, this,
           [&] { aboutDialog->close(); });
+  closeButton->setDefault(true);
 
   const auto qtButton =
       buttonBox->addButton("About Qt", QDialogButtonBox::ButtonRole::NoRole);

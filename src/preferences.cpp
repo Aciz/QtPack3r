@@ -115,6 +115,7 @@ void PreferencesDialog::buildPreferencesDialog() {
   closeButton = new QPushButton(
       QApplication::style()->standardIcon(QStyle::SP_DialogCloseButton),
       tr("Close"), this);
+  closeButton->setDefault(true);
 
   buttonLayout = new QHBoxLayout;
   buttonLayout->addWidget(resetDefaultsButton);
