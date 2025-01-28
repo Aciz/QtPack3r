@@ -40,6 +40,7 @@
 #define GIT_COMMIT_HASH_SHORT "n/a"
 #endif
 
+#include "preferences.h"
 #include "qtpack3r_widget.h"
 
 #include <QApplication>
@@ -63,6 +64,7 @@ private:
   void buildAboutDialog();
 
   QtPack3rWidget *qtPack3rwidget{};
+  PreferencesDialog *preferencesDialog{};
 
   const QString pack3rLink = "https://github.com/ovska/Pack3r/releases/latest";
   const QString qtPack3rLink = "https://github.com/Aciz/QtPack3r";
@@ -86,7 +88,7 @@ private:
   QDialog *aboutDialog{};
 
 private slots:
-  void openPreferences();
+  void openPreferences() const;
   void openAboutWindow();
   void openPack3rLink() const;
   void openBugReportLink() const;

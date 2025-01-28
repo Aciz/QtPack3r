@@ -34,7 +34,9 @@
 #include <QMimeData>
 #include <QSignalBlocker>
 
-QtPack3rWidget::QtPack3rWidget(QWidget *parent) : QWidget(parent) {
+QtPack3rWidget::QtPack3rWidget(
+    QWidget *parent, const QPointer<PreferencesDialog> &preferencesDialogPtr)
+    : QWidget(parent), preferencesDialog(preferencesDialogPtr) {
   setupCommands();
 
   outputParser = new Pack3rOutputParser(this);
@@ -202,4 +204,9 @@ void QtPack3rWidget::resetWidgetState() {
 
 void QtPack3rWidget::updatePack3rOutput(const QByteArray &data) const {
   ui.output.outputField->appendPlainText(data);
+}
+
+void QtPack3rWidget::updatePack3rPath(const QString &newPath) {
+  ui.paths.pack3rPathField->setText(newPath);
+  updateCommandPreview();
 }
