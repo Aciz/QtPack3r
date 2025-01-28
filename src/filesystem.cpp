@@ -64,11 +64,7 @@ QString FileSystem::getPack3rPath(const QString &defaultPath) {
   if (ret == QDialog::Accepted) {
     const QString selectedFile = fileDialog.selectedFiles().first();
 
-    if (!selectedFile.endsWith(PACK3R_EXECUTABLE, Qt::CaseInsensitive)) {
-      QMessageBox dialog{};
-      Dialog::setupMessageBox(dialog,
-                              Dialog::MessageBox::INVALID_PACK3R_BINARY);
-      dialog.exec();
+    if (!isValidPack3rBinary(selectedFile)) {
       return {};
     }
 
@@ -109,4 +105,19 @@ QString FileSystem::getOutputPath(const QString &defaultPath) {
 
 QString FileSystem::getDefaultPath(const QString &defaultPath) {
   return defaultPath.isEmpty() ? QDir::homePath() : defaultPath;
+}
+
+bool FileSystem::isValidPack3rBinary(const QString &file, const bool silent) {
+  if (!file.endsWith(PACK3R_EXECUTABLE, Qt::CaseInsensitive)) {
+    if (!silent) {
+      QMessageBox dialog{};
+      Dialog::setupMessageBox(dialog,
+                              Dialog::MessageBox::INVALID_PACK3R_BINARY);
+      dialog.exec();
+    }
+
+    return false;
+  }
+
+  return true;
 }
