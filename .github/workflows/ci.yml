@@ -8,6 +8,7 @@ on:
       - '*'
     paths-ignore:
       - .gitignore
+      - .gitattributes
       - .clang-format
       - scripts/*
       - README.md
@@ -17,6 +18,7 @@ on:
     branches: [ "master" ]
     paths-ignore:
       - .gitignore
+      - .gitattributes
       - .clang-format
       - scripts/*
       - README.md
