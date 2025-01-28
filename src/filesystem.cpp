@@ -77,11 +77,13 @@ QString FileSystem::getPack3rPath(const QString &defaultPath) {
 #else
     const QFileInfo fileInfo(selectedFile);
 
-    if (fileInfo.isExecutable()) {
-      return QDir::toNativeSeparators(selectedFile);
+    if (!fileInfo.isExecutable()) {
+      QMessageBox::critical(
+          nullptr, "Invalid file permissions",
+          QString("File '%1' is not executable. Check the file permissions.")
+              .arg(selectedFile));
     } else {
-      QMessageBox::critical(nullptr, "Invalid file",
-                            "The selected file is not an executable file.");
+      return QDir::toNativeSeparators(selectedFile);
     }
 #endif
   }
