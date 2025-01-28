@@ -169,6 +169,7 @@ void PreferencesDialog::buildPathsPage() {
 
   pathsPage.pack3rPathField = new QLineEdit(pathsPage.groupBox);
   pathsPage.pack3rPathField->setToolTip(pack3rPathTooltip);
+  pathsPage.pack3rPathField->setReadOnly(true);
 
   pathsPage.pack3rPathAction = new QAction(pathsPage.groupBox);
   pathsPage.pack3rPathAction = pathsPage.pack3rPathField->addAction(
@@ -181,6 +182,7 @@ void PreferencesDialog::buildPathsPage() {
 
   pathsPage.mapsPathField = new QLineEdit(pathsPage.groupBox);
   pathsPage.mapsPathField->setToolTip(mapsPathTooltip);
+  pathsPage.mapsPathField->setReadOnly(true);
 
   pathsPage.mapsPathAction = new QAction(pathsPage.groupBox);
   pathsPage.mapsPathAction = pathsPage.mapsPathField->addAction(
@@ -238,11 +240,6 @@ void PreferencesDialog::setupPathsPageConnections() {
     }
   });
 
-  connect(pathsPage.mapsPathField, &QLineEdit::editingFinished, this, [&] {
-    preferences.writeSetting(Preferences::Settings::MAPS_PATH,
-                             pathsPage.mapsPathField->text());
-  });
-
   connect(pathsPage.pack3rPathAction, &QAction::triggered, this, [&] {
     const QString path = FileSystem::getPack3rPath(
         preferences.readSetting(Preferences::Settings::PACK3R_PATH).toString());
@@ -251,11 +248,6 @@ void PreferencesDialog::setupPathsPageConnections() {
       preferences.writeSetting(Preferences::Settings::PACK3R_PATH, path);
       pathsPage.pack3rPathField->setText(path);
     }
-  });
-
-  connect(pathsPage.pack3rPathField, &QLineEdit::editingFinished, this, [&] {
-    preferences.writeSetting(Preferences::Settings::PACK3R_PATH,
-                             pathsPage.pack3rPathField->text());
   });
 }
 
