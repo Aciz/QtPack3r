@@ -134,6 +134,8 @@ void PreferencesDialog::buildPreferencesDialog() {
   setupConnections();
 }
 void PreferencesDialog::setInitialState() {
+  parseSettingsFile();
+
   pageList->setCurrentRow(0);
   pages->setCurrentIndex(pageList->currentRow());
   pathsPage.oldPack3rPath = pathsPage.pack3rPathField->text();
@@ -145,9 +147,6 @@ void PreferencesDialog::buildInterfacePage() {
 
   interfacePage.windowSizeCheckbox =
       new QCheckBox(tr("Remember window size"), interfacePage.groupBox);
-  interfacePage.windowSizeCheckbox->setChecked(
-      preferences.readSetting(Preferences::Settings::WINDOW_REMEMBER_SIZE)
-          .toBool());
   interfacePage.windowSizeCheckbox->setToolTip(
       tr("Restore window size from previous session on startup"));
 
@@ -175,12 +174,6 @@ void PreferencesDialog::buildPathsPage() {
   pathsPage.pack3rPathAction = pathsPage.pack3rPathField->addAction(
       QApplication::style()->standardIcon(QStyle::SP_DialogOpenButton),
       QLineEdit::ActionPosition::TrailingPosition);
-  const QString pack3rPathStr =
-      preferences.readSetting(Preferences::Settings::PACK3R_PATH).toString();
-
-  if (!pack3rPathStr.isEmpty()) {
-    pathsPage.pack3rPathField->setText(pack3rPathStr);
-  }
 
   const QString mapsPathTooltip = tr("Default location to discover maps from");
   pathsPage.mapsPathLabel = new QLabel(tr("Mapping path"));
@@ -193,12 +186,6 @@ void PreferencesDialog::buildPathsPage() {
   pathsPage.mapsPathAction = pathsPage.mapsPathField->addAction(
       QApplication::style()->standardIcon(QStyle::SP_DialogOpenButton),
       QLineEdit::ActionPosition::TrailingPosition);
-  const QString mapsPathStr =
-      preferences.readSetting(Preferences::Settings::MAPS_PATH).toString();
-
-  if (!mapsPathStr.isEmpty()) {
-    pathsPage.mapsPathField->setText(mapsPathStr);
-  }
 
   pathsPage.itemLayout = new QGridLayout(pathsPage.groupBox);
 
@@ -285,6 +272,17 @@ void PreferencesDialog::setupPathsPageConnections() {
       }
     }
   });
+}
+
+void PreferencesDialog::parseSettingsFile() {
+  interfacePage.windowSizeCheckbox->setChecked(
+      preferences.readSetting(Preferences::Settings::WINDOW_REMEMBER_SIZE)
+          .toBool());
+
+  pathsPage.pack3rPathField->setText(
+      preferences.readSetting(Preferences::Settings::PACK3R_PATH).toString());
+  pathsPage.mapsPathField->setText(
+      preferences.readSetting(Preferences::Settings::MAPS_PATH).toString());
 }
 
 // TODO: once this dialog is part of the Preferences class,

@@ -114,6 +114,8 @@ private:
   void setupInterfacePageConnections();
   void setupPathsPageConnections();
 
+  void parseSettingsFile();
+
   void resetPreferencesDialogWidget() const;
 
   struct InterfacePage {
