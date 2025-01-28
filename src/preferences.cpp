@@ -254,23 +254,8 @@ void PreferencesDialog::setupPathsPageConnections() {
   });
 
   connect(pathsPage.pack3rPathField, &QLineEdit::editingFinished, this, [&] {
-    if (FileSystem::isValidPack3rBinary(pathsPage.pack3rPathField->text())) {
-      preferences.writeSetting(Preferences::Settings::PACK3R_PATH,
-                               pathsPage.pack3rPathField->text());
-    } else {
-      // try to restore from settings
-      const QString oldFile =
-          preferences.readSetting(Preferences::Settings::PACK3R_PATH)
-              .toString();
-
-      if (FileSystem::isValidPack3rBinary(oldFile, true)) {
-        pathsPage.pack3rPathField->setText(oldFile);
-      } else {
-        // fallback, just clear the field and remove the bad entry from settings
-        preferences.writeSetting(Preferences::Settings::PACK3R_PATH, "");
-        pathsPage.pack3rPathField->clear();
-      }
-    }
+    preferences.writeSetting(Preferences::Settings::PACK3R_PATH,
+                             pathsPage.pack3rPathField->text());
   });
 }
 
