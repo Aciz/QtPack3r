@@ -127,21 +127,21 @@ bool QtPack3rWidget::canRunPack3r() const {
     dialog.setText(tr("No output file specified!"));
     dialog.setInformativeText(tr("Please specify a valid output file."));
     canRun = false;
-  }
-
-  // check file permissions on Linux, so we don't silently error
+  } else {
+    // check file permissions on Linux, so we don't silently error
 #ifdef Q_OS_LINUX
-  const QFileInfo fileInfo(ui.paths.pack3rPathField->text());
+    const QFileInfo fileInfo(ui.paths.pack3rPathField->text());
 
-  if (!fileInfo.isExecutable()) {
-    QMessageBox::critical(
-        nullptr, "Invalid file permissions",
-        QString("File '%1' is not executable. Check the file permissions.")
-            .arg(ui.paths.pack3rPathField->text()));
-    // return here so we don't get double dialogs
-    return false;
-  }
+    if (!fileInfo.isExecutable()) {
+      QMessageBox::critical(
+          nullptr, "Invalid file permissions",
+          QString("File '%1' is not executable. Check the file permissions.")
+              .arg(ui.paths.pack3rPathField->text()));
+      // return here so we don't get double dialogs
+      return false;
+    }
 #endif
+  }
 
   if (!canRun) {
     dialog.exec();
