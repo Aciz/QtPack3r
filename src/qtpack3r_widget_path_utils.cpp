@@ -39,6 +39,7 @@ void QtPack3rWidget::findPack3r() {
     preferences.writeSetting(Preferences::Settings::PACK3R_PATH,
                              ui.paths.pack3rPathField->text());
     updateCommandPreview();
+    checkPack3rVersion();
   }
 }
 

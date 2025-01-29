@@ -51,6 +51,7 @@ private:
 
   // optimization so we don't need to do .contains() for every line of output
   bool overWritePrompted{};
+  bool isVersionCheck{};
 
   QString currentOutputFile;
 };

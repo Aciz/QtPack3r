@@ -23,6 +23,7 @@
  */
 
 #include "pack3r_output_parser.h"
+
 Pack3rOutputParser::Pack3rOutputParser(QObject *parent)
     : QObject(parent), cursorPos(0) {}
 
@@ -66,4 +67,17 @@ void Pack3rOutputParser::processOutput(const QByteArray &data) {
 
     cursorPos++;
   }
+}
+
+void Pack3rOutputParser::processVersion(const QByteArray &data) {
+  // there's seemingly an empty string sent at the end of --version command,
+  // ignore that so we don't overwrite the version with an empty string
+  if (data.isEmpty()) {
+    return;
+  }
+
+  // version strings have git hash appended to them, strip that out
+  // if the version string does not contain '+' for some reason,
+  // the entire string is included
+  emit pack3rVersionParsed(data.mid(0, data.indexOf("+")));
 }

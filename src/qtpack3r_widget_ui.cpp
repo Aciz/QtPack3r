@@ -56,6 +56,12 @@ void QtPack3rWidget::setupPathsGroupBox() {
       QApplication::style()->standardIcon(QStyle::SP_DialogOpenButton),
       QLineEdit::ActionPosition::TrailingPosition);
 
+  ui.paths.pack3rVersionLabel = new QLabel(this);
+  ui.paths.pack3rVersionLabel->setText("-");
+  ui.paths.pack3rVersionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  ui.paths.pack3rVersionLabel->setToolTip(tr("Detected Pack3r version"));
+  ui.paths.pack3rVersionLabel->setMinimumWidth(70);
+
   const QString mapPathToolTip = tr("Location of map file to process");
   ui.paths.mapPathLabel = new QLabel(tr("Path to map"), this);
   ui.paths.mapPathLabel->setToolTip(mapPathToolTip);
@@ -83,6 +89,7 @@ void QtPack3rWidget::setupPathsGroupBox() {
 
   ui.paths.layout->addWidget(ui.paths.pack3rPathLabel, 0, 0);
   ui.paths.layout->addWidget(ui.paths.pack3rPathField, 0, 1);
+  ui.paths.layout->addWidget(ui.paths.pack3rVersionLabel, 0, 2);
 
   ui.paths.layout->addWidget(ui.paths.mapPathLabel, 1, 0);
   ui.paths.layout->addWidget(ui.paths.mapPathField, 1, 1);

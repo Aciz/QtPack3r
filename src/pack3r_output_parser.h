@@ -33,9 +33,11 @@ public:
   explicit Pack3rOutputParser(QObject *parent);
 
   void processOutput(const QByteArray &data);
+  void processVersion(const QByteArray &data);
 
 signals:
   void pack3rOutputProcessed(const QByteArray &data);
+  void pack3rVersionParsed(const QString &version);
 
 private:
   QByteArray currentLine;
