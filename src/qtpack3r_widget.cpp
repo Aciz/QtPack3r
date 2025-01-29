@@ -101,7 +101,8 @@ void QtPack3rWidget::checkPack3rVersion() const {
 #endif
 
   if (!pack3rBinary.isEmpty() &&
-      pack3rBinary.endsWith(PACK3R_EXECUTABLE, Qt::CaseInsensitive)) {
+      pack3rBinary.endsWith(QDir::toNativeSeparators(PACK3R_EXECUTABLE),
+                            Qt::CaseInsensitive)) {
     processHandler->spawnProcess({pack3rBinary, {"--version"}}, "");
   }
 }
