@@ -40,6 +40,9 @@ void QtPack3rWidget::setupPathsConnections() {
   connect(preferencesDialog, &PreferencesDialog::pack3rPathChanged, this,
           &QtPack3rWidget::updatePack3rPath);
 
+  connect(outputParser, &Pack3rOutputParser::pack3rVersionParsed, this,
+          &QtPack3rWidget::setPack3rVersionString);
+
   connect(ui.paths.mapPathAction, &QAction::triggered, this,
           &QtPack3rWidget::openMap);
 

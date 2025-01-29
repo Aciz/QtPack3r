@@ -36,6 +36,9 @@ void Pack3rProcessHandler::spawnProcess(
   process->setProgram(command.first);
   process->setArguments(command.second);
 
+  // TODO: should probably refactor this function to take some sort of
+  //  'type' argument on what workload we're running, this is kinda ugly
+  isVersionCheck = process->arguments().join("") == "--version";
   currentOutputFile = outputFile;
   overWritePrompted = false;
 
@@ -49,6 +52,12 @@ void Pack3rProcessHandler::spawnProcess(
 
 void Pack3rProcessHandler::readStdOut() {
   const auto out = process->readAllStandardOutput();
+
+  if (isVersionCheck) {
+    parser->processVersion(out);
+    return;
+  }
+
   parser->processOutput(out);
 
   Q_ASSERT(!currentOutputFile.isEmpty());

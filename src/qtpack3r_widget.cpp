@@ -29,6 +29,7 @@
 
 #include "qtpack3r_widget.h"
 #include "dialog.h"
+#include "filesystem.h"
 #include "preferences.h"
 
 #include <QMimeData>
@@ -49,6 +50,8 @@ QtPack3rWidget::QtPack3rWidget(
   parseOptions();
   setDefaults();
   updateCommandPreview();
+
+  checkPack3rVersion();
 
   setAcceptDrops(true);
 }
@@ -80,6 +83,27 @@ void QtPack3rWidget::setDefaults() {
   pack3rCommands[NOPACK].second.value = ui.options.noPackField->text();
   pack3rCommands[VERBOSITY].second.value =
       ui.debug.verbosityCombobox->currentText().toLower();
+}
+
+void QtPack3rWidget::checkPack3rVersion() const {
+  const QString pack3rBinary = ui.paths.pack3rPathField->text();
+
+  // technically this should not be possible because we don't allow
+  // selecting a non-executable file, but if this somehow happens,
+  // it's better to not just silently error
+#ifdef Q_OS_LINUX
+  const QFileInfo fileInfo(pack3rBinary);
+
+  if (!fileInfo.isExecutable()) {
+    ui.paths.pack3rVersionLabel->setText("-");
+    return;
+  }
+#endif
+
+  if (!pack3rBinary.isEmpty() &&
+      pack3rBinary.endsWith(PACK3R_EXECUTABLE, Qt::CaseInsensitive)) {
+    processHandler->spawnProcess({pack3rBinary, {"--version"}}, "");
+  }
 }
 
 void QtPack3rWidget::dragEnterEvent(QDragEnterEvent *event) {
@@ -223,4 +247,9 @@ void QtPack3rWidget::updatePack3rOutput(const QByteArray &data) const {
 void QtPack3rWidget::updatePack3rPath(const QString &newPath) {
   ui.paths.pack3rPathField->setText(newPath);
   updateCommandPreview();
+  checkPack3rVersion();
+}
+
+void QtPack3rWidget::setPack3rVersionString(const QString &version) const {
+  ui.paths.pack3rVersionLabel->setText(version);
 }

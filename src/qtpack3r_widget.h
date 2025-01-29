@@ -132,6 +132,7 @@ private:
   static bool isValidMapPath(const QString &path);
   void replaceMapFileExtension(QString &str) const;
   void updateOutputExtension() const;
+  void checkPack3rVersion() const;
 
   void dragEnterEvent(QDragEnterEvent *event) override;
   void dropEvent(QDropEvent *event) override;
@@ -169,6 +170,7 @@ private:
 
     QLineEdit *pack3rPathField{};
     QAction *pack3rPathAction{};
+    QLabel *pack3rVersionLabel{};
 
     bool defaultMapPathSet{};
     QLineEdit *mapPathField{};
@@ -255,4 +257,5 @@ private slots:
   void copyFieldToClipboard(const QPlainTextEdit *field) const;
   void resetWidgetState();
   void updatePack3rPath(const QString &newPath);
+  void setPack3rVersionString(const QString &version) const;
 };
