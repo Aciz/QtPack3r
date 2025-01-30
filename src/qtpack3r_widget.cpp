@@ -95,7 +95,7 @@ void QtPack3rWidget::checkPack3rVersion() const {
   const QFileInfo fileInfo(pack3rBinary);
 
   if (!fileInfo.isExecutable()) {
-    ui.paths.pack3rVersionLabel->setText("-");
+    ui.statusBar.pack3rVersion->setText("-");
     return;
   }
 #endif
@@ -252,5 +252,5 @@ void QtPack3rWidget::updatePack3rPath(const QString &newPath) {
 }
 
 void QtPack3rWidget::setPack3rVersionString(const QString &version) const {
-  ui.paths.pack3rVersionLabel->setText(version);
+  ui.statusBar.pack3rVersion->setText(version);
 }
