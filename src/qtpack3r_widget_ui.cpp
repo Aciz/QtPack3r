@@ -32,12 +32,14 @@ QGridLayout *QtPack3rWidget::buildUI() {
   setupDebugGroupBox();
   setupCommandPreviewGroupBox();
   setupOutputGroupBox();
+  setupStatusBar();
 
   layout->addWidget(ui.paths.groupBox);
   layout->addWidget(ui.options.groupBox);
   layout->addWidget(ui.debug.groupBox);
   layout->addWidget(ui.commandPreview.groupBox);
   layout->addWidget(ui.output.groupBox);
+  layout->addWidget(ui.statusBar.bar);
 
   return layout;
 }
@@ -55,12 +57,6 @@ void QtPack3rWidget::setupPathsGroupBox() {
   ui.paths.pack3rPathAction = ui.paths.pack3rPathField->addAction(
       QApplication::style()->standardIcon(QStyle::SP_DialogOpenButton),
       QLineEdit::ActionPosition::TrailingPosition);
-
-  ui.paths.pack3rVersionLabel = new QLabel(this);
-  ui.paths.pack3rVersionLabel->setText("-");
-  ui.paths.pack3rVersionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-  ui.paths.pack3rVersionLabel->setToolTip(tr("Detected Pack3r version"));
-  ui.paths.pack3rVersionLabel->setMinimumWidth(70);
 
   const QString mapPathToolTip = tr("Location of map file to process");
   ui.paths.mapPathLabel = new QLabel(tr("Path to map"), this);
@@ -89,7 +85,6 @@ void QtPack3rWidget::setupPathsGroupBox() {
 
   ui.paths.layout->addWidget(ui.paths.pack3rPathLabel, 0, 0);
   ui.paths.layout->addWidget(ui.paths.pack3rPathField, 0, 1);
-  ui.paths.layout->addWidget(ui.paths.pack3rVersionLabel, 0, 2);
 
   ui.paths.layout->addWidget(ui.paths.mapPathLabel, 1, 0);
   ui.paths.layout->addWidget(ui.paths.mapPathField, 1, 1);
@@ -295,6 +290,26 @@ void QtPack3rWidget::setupOutputGroupBox() {
   ui.output.layout->addLayout(ui.output.buttonLayout, 1, 0);
 
   ui.output.groupBox->setLayout(ui.output.layout);
+}
+
+void QtPack3rWidget::setupStatusBar() {
+  ui.statusBar.bar = new QStatusBar(this);
+
+  ui.statusBar.statusBarMessage = new QLabel(this);
+
+  ui.statusBar.qtPack3rVersion = new QLabel(PROJECT_VERSION, this);
+  ui.statusBar.qtPack3rVersion->setToolTip(tr("QtPack3r version"));
+  ui.statusBar.qtPack3rVersion->setMinimumWidth(80);
+  ui.statusBar.qtPack3rVersion->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+  ui.statusBar.pack3rVersion = new QLabel("-", this);
+  ui.statusBar.pack3rVersion->setToolTip(tr("Pack3r version"));
+  ui.statusBar.pack3rVersion->setMinimumWidth(80);
+  ui.statusBar.pack3rVersion->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+  ui.statusBar.bar->addWidget(ui.statusBar.statusBarMessage, 1);
+  ui.statusBar.bar->addPermanentWidget(ui.statusBar.pack3rVersion);
+  ui.statusBar.bar->addPermanentWidget(ui.statusBar.qtPack3rVersion);
 }
 
 void QtPack3rWidget::updateCheckbox(const Pack3rOptions option,

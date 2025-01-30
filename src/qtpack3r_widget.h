@@ -45,6 +45,7 @@
 #include <QPointer>
 #include <QPushButton>
 #include <QScrollBar>
+#include <QStatusBar>
 
 // Linux users will very likely have a system-wide monospace font set to one
 // they prefer, but Windows default is 'Courier New', which looks awful here.
@@ -107,6 +108,7 @@ private:
   void setupDebugGroupBox();
   void setupCommandPreviewGroupBox();
   void setupOutputGroupBox();
+  void setupStatusBar();
 
   // connections
   void setupConnections();
@@ -170,7 +172,6 @@ private:
 
     QLineEdit *pack3rPathField{};
     QAction *pack3rPathAction{};
-    QLabel *pack3rVersionLabel{};
 
     bool defaultMapPathSet{};
     QLineEdit *mapPathField{};
@@ -242,12 +243,21 @@ private:
     QPushButton *clearButton{};
   };
 
+  struct UIStatusBar {
+    QStatusBar *bar{};
+
+    QLabel *qtPack3rVersion{};
+    QLabel *pack3rVersion{};
+    QLabel *statusBarMessage{};
+  };
+
   struct UI {
     UIPaths paths;
     UIOptions options;
     UIDebug debug;
     UICommandPreview commandPreview;
     UIOutput output;
+    UIStatusBar statusBar;
   };
 
   UI ui{};
