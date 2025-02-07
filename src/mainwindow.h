@@ -42,6 +42,7 @@
 
 #include "preferences.h"
 #include "qtpack3r_widget.h"
+#include "update_checker.h"
 
 #include <QApplication>
 #include <QMainWindow>
@@ -65,6 +66,7 @@ private:
 
   QtPack3rWidget *qtPack3rwidget{};
   PreferencesDialog *preferencesDialog{};
+  UpdateChecker *updateChecker{};
 
   const QString pack3rLink = "https://github.com/ovska/Pack3r/releases/latest";
   const QString qtPack3rLink = "https://github.com/Aciz/QtPack3r";

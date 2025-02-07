@@ -36,7 +36,24 @@ inline constexpr int DEFAULT_HEIGHT = 800;
 
 MainWindow::MainWindow() {
   preferencesDialog = new PreferencesDialog(this);
-  qtPack3rwidget = new QtPack3rWidget(this, preferencesDialog);
+  updateChecker = new UpdateChecker(this);
+  qtPack3rwidget = new QtPack3rWidget(this, preferencesDialog, updateChecker);
+
+  updateChecker->init();
+
+  // Because GitHubs API is rate limited quite heavily for unauthenticated
+  // requests, this is disabled by default in Debug mode
+  // to avoid spamming the API and getting everyone rate limited.
+  // Enable with care!
+#if !defined(QT_DEBUG) || defined(UPDATE_CHECKS_IN_DEBUG)
+  updateChecker->check();
+#endif
+
+  // FIXME: make this better - UPDATE_CHECKS_IN_DEBUG and MOCK_UPDATES
+  //  should be mutually exclusive
+#if defined(MOCK_UPDATES) && !defined(UPDATE_CHECKS_IN_DEBUG)
+  updateChecker->mockCheck();
+#endif
 
   setupGeometry();
   setupMenuBar();

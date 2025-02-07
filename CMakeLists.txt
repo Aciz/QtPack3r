@@ -8,7 +8,7 @@ include(VersionDescription)
 get_version(VERSION)
 project(QtPack3r VERSION "${VERSION}" LANGUAGES CXX)
 
-find_package(Qt6 6.2 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 6.2 REQUIRED COMPONENTS Core Widgets Network)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -43,10 +43,14 @@ qt_add_executable(${CMAKE_PROJECT_NAME}
         src/preferences.h
         src/filesystem.cpp
         src/filesystem.h
+        src/update_checker.cpp
+        src/update_checker.h
         ${app_icon_resource_windows}
         resources/QtPack3r.qrc
-
 )
+
+option(UPDATE_CHECKS_IN_DEBUG "Enable update checks to GitHub REST API in debug mode" OFF)
+option(MOCK_UPDATES "Enable mock API responses to debug the update system" OFF)
 
 get_version_description(QTPACK3R_VERSION)
 
@@ -57,10 +61,19 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
         GIT_COMMIT_HASH_SHORT="${QTPACK3R_VERSION_COMMIT_HASH_SHORT}"
 )
 
+if (UPDATE_CHECKS_IN_DEBUG)
+    target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE UPDATE_CHECKS_IN_DEBUG)
+endif ()
+
+if (MOCK_UPDATES)
+    target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MOCK_UPDATES)
+endif ()
+
 target_link_libraries(${CMAKE_PROJECT_NAME}
         PRIVATE
         Qt::Core
         Qt::Widgets
+        Qt::Network
 )
 
 include(GNUInstallDirs)

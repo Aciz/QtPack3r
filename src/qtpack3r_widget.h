@@ -27,6 +27,7 @@
 #include "pack3r_output_parser.h"
 #include "pack3r_process_handler.h"
 #include "preferences.h"
+#include "update_checker.h"
 
 #include <QApplication>
 #include <QButtonGroup>
@@ -62,7 +63,8 @@ class QtPack3rWidget : public QWidget {
 
 public:
   QtPack3rWidget(QWidget *parent,
-                 const QPointer<PreferencesDialog> &preferencesDialogPtr);
+                 const QPointer<PreferencesDialog> &preferencesDialogPtr,
+                 const QPointer<UpdateChecker> &updateCheckerPtr);
 
 public slots:
   void findPack3r();
@@ -135,6 +137,7 @@ private:
   void replaceMapFileExtension(QString &str) const;
   void updateOutputExtension() const;
   void checkPack3rVersion() const;
+  void checkQtPack3rVersion();
 
   void dragEnterEvent(QDragEnterEvent *event) override;
   void dropEvent(QDropEvent *event) override;
@@ -148,6 +151,7 @@ private:
   Pack3rProcessHandler *processHandler;
   QPointer<Pack3rOutputParser> outputParser;
   QPointer<PreferencesDialog> preferencesDialog;
+  QPointer<UpdateChecker> updateChecker;
 
   QGridLayout *layout{};
 
@@ -162,6 +166,9 @@ private:
 
   // path to Pack3r, options
   QPair<QString, QStringList> currentCmd{};
+
+  QList<UpdateChecker::ReleaseInfo> qtPack3rReleases{};
+  QList<UpdateChecker::ReleaseInfo> pack3rReleases{};
 
   struct UIPaths {
     QGroupBox *groupBox{};
@@ -246,9 +253,17 @@ private:
   struct UIStatusBar {
     QStatusBar *bar{};
 
-    QLabel *qtPack3rVersion{};
-    QLabel *pack3rVersion{};
     QLabel *statusBarMessage{};
+
+    QWidget *pack3rLabelContainerWidget{};
+    QHBoxLayout *pack3rVersionLayout{};
+    QLabel *pack3rVersion{};
+    QLabel *pack3rUpdateIcon{};
+
+    QWidget *qtPack3rLabelContainerWidget{};
+    QHBoxLayout *qtPack3rVersionLayout{};
+    QLabel *qtPack3rVersion{};
+    QLabel *qtPack3rUpdateIcon{};
   };
 
   struct UI {
@@ -268,4 +283,6 @@ private slots:
   void resetWidgetState();
   void updatePack3rPath(const QString &newPath);
   void setPack3rVersionString(const QString &version) const;
+
+  void saveReleaseInfos(const QList<UpdateChecker::ReleaseInfo> &releases);
 };

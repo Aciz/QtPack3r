@@ -294,22 +294,56 @@ void QtPack3rWidget::setupOutputGroupBox() {
 
 void QtPack3rWidget::setupStatusBar() {
   ui.statusBar.bar = new QStatusBar(this);
+  ui.statusBar.bar->setMinimumHeight(32);
+  ui.statusBar.bar->setMaximumHeight(32);
 
   ui.statusBar.statusBarMessage = new QLabel(this);
 
+  const QString qtPackerLabelToolTip = tr("QtPack3r version");
+  const QString pack3rLabelToolTip = tr("Pack3r version");
+  const QPixmap updateIcon = QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation).pixmap(16, 16);
+
   ui.statusBar.qtPack3rVersion = new QLabel(PROJECT_VERSION, this);
-  ui.statusBar.qtPack3rVersion->setToolTip(tr("QtPack3r version"));
-  ui.statusBar.qtPack3rVersion->setMinimumWidth(80);
+  ui.statusBar.qtPack3rVersion->setToolTip(qtPackerLabelToolTip);
   ui.statusBar.qtPack3rVersion->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
+  ui.statusBar.qtPack3rUpdateIcon = new QLabel(this);
+  ui.statusBar.qtPack3rUpdateIcon->setPixmap(updateIcon);
+  ui.statusBar.qtPack3rUpdateIcon->setToolTip(qtPackerLabelToolTip);
+  ui.statusBar.qtPack3rUpdateIcon->hide();
+
+  ui.statusBar.qtPack3rVersionLayout = new QHBoxLayout;
+  ui.statusBar.qtPack3rVersionLayout->setContentsMargins(2, 2, 2, 2);
+  ui.statusBar.qtPack3rVersionLayout->addStretch(1);
+  ui.statusBar.qtPack3rVersionLayout->addWidget(ui.statusBar.qtPack3rVersion);
+  ui.statusBar.qtPack3rVersionLayout->addWidget(ui.statusBar.qtPack3rUpdateIcon);
+
+  ui.statusBar.qtPack3rLabelContainerWidget = new QWidget(ui.statusBar.bar);
+  ui.statusBar.qtPack3rLabelContainerWidget->setLayout(ui.statusBar.qtPack3rVersionLayout);
+
   ui.statusBar.pack3rVersion = new QLabel("-", this);
-  ui.statusBar.pack3rVersion->setToolTip(tr("Pack3r version"));
-  ui.statusBar.pack3rVersion->setMinimumWidth(80);
+  ui.statusBar.pack3rVersion->setToolTip(pack3rLabelToolTip);
   ui.statusBar.pack3rVersion->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
+  ui.statusBar.pack3rUpdateIcon = new QLabel(this);
+  ui.statusBar.pack3rUpdateIcon->setPixmap(updateIcon);
+  ui.statusBar.pack3rUpdateIcon->setToolTip(pack3rLabelToolTip);
+  ui.statusBar.pack3rUpdateIcon->hide();
+
+  ui.statusBar.pack3rVersionLayout = new QHBoxLayout;
+  ui.statusBar.pack3rVersionLayout->setContentsMargins(2, 2, 2, 2);
+  ui.statusBar.pack3rVersionLayout->addStretch(1);
+  ui.statusBar.pack3rVersionLayout->addWidget(ui.statusBar.pack3rVersion);
+  ui.statusBar.pack3rVersionLayout->addWidget(ui.statusBar.pack3rUpdateIcon);
+
+  ui.statusBar.pack3rLabelContainerWidget = new QWidget(ui.statusBar.bar);
+  ui.statusBar.pack3rLabelContainerWidget->setMaximumHeight(30);
+  ui.statusBar.pack3rLabelContainerWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  ui.statusBar.pack3rLabelContainerWidget->setLayout(ui.statusBar.pack3rVersionLayout);
+
   ui.statusBar.bar->addWidget(ui.statusBar.statusBarMessage, 1);
-  ui.statusBar.bar->addPermanentWidget(ui.statusBar.pack3rVersion);
-  ui.statusBar.bar->addPermanentWidget(ui.statusBar.qtPack3rVersion);
+  ui.statusBar.bar->addPermanentWidget(ui.statusBar.pack3rLabelContainerWidget);
+  ui.statusBar.bar->addPermanentWidget(ui.statusBar.qtPack3rLabelContainerWidget);
 }
 
 void QtPack3rWidget::updateCheckbox(const Pack3rOptions option,

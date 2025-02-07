@@ -31,6 +31,8 @@ void QtPack3rWidget::setupConnections() {
   setupDebugConnections();
   setupCommandPreviewConnections();
   setupOutputConnections();
+
+  connect(updateChecker, &UpdateChecker::releasesReceived, this, &QtPack3rWidget::saveReleaseInfos);
 }
 
 void QtPack3rWidget::setupPathsConnections() {

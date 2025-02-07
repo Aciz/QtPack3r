@@ -36,8 +36,10 @@
 #include <QSignalBlocker>
 
 QtPack3rWidget::QtPack3rWidget(
-    QWidget *parent, const QPointer<PreferencesDialog> &preferencesDialogPtr)
-    : QWidget(parent), preferencesDialog(preferencesDialogPtr) {
+    QWidget *parent, const QPointer<PreferencesDialog> &preferencesDialogPtr,
+    const QPointer<UpdateChecker> &updateCheckerPtr)
+    : QWidget(parent), preferencesDialog(preferencesDialogPtr),
+      updateChecker(updateCheckerPtr) {
   setupCommands();
 
   outputParser = new Pack3rOutputParser(this);
@@ -253,4 +255,17 @@ void QtPack3rWidget::updatePack3rPath(const QString &newPath) {
 
 void QtPack3rWidget::setPack3rVersionString(const QString &version) const {
   ui.statusBar.pack3rVersion->setText(version);
+}
+
+void QtPack3rWidget::saveReleaseInfos(const QList<UpdateChecker::ReleaseInfo> &releases) {
+  // might happen if API times out
+  if (releases.empty()) {
+    return;
+  }
+
+  if (releases[0].type == UpdateChecker::QTPACK3R_RELEASE) {
+    qtPack3rReleases = releases;
+  } else {
+    pack3rReleases = releases;
+  }
 }

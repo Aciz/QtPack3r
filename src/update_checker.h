@@ -22,33 +22,48 @@
  * SOFTWARE.
  */
 
-#include "mainwindow.h"
-#include "preferences.h"
-#include "update_checker.h"
+#pragma once
 
-#include <QApplication>
+#include <QNetworkAccessManager>
 
-#ifdef Q_OS_WINDOWS
-#include <QStyleFactory>
+class UpdateChecker : public QObject {
+  Q_OBJECT
+
+public:
+  explicit UpdateChecker(QObject *parent = nullptr);
+
+  enum ReleaseType {
+    QTPACK3R_RELEASE,
+    PACKER_RELEASE,
+  };
+
+  struct ReleaseInfo {
+    ReleaseType type;
+    QString tag;
+    QDateTime releaseDate;
+  };
+
+  void init();
+  void check();
+
+#ifdef MOCK_UPDATES
+  void mockCheck();
 #endif
 
-int main(int argc, char *argv[]) {
-  // Set 'Fusion' as the default style on Windows, as Qts default 'windowsvista'
-  // style does not include dark variant, and therefore ignores the users
-  // preference for light/dark mode in applications.
-  // Do this before initializing the QApplication, so if a user passes in
-  // -style argument manually, that is still respected.
-#ifdef Q_OS_WINDOWS
-  QApplication::setStyle(QStyleFactory::create("fusion"));
+signals:
+  void releasesReceived(const QList<ReleaseInfo> &releases);
+
+private:
+  void sendRequest(const QUrl &url) const;
+  void onRequestFinished(QNetworkReply *reply);
+
+#ifdef MOCK_UPDATES
+  void mockOnRequestFinished(const QString &input, ReleaseType type);
 #endif
 
-  QApplication app(argc, argv);
-  QApplication::setApplicationName(PROJECT_NAME);
+  const QString userAgentHeader = QString("QtPack3r %1 update checker").arg(PROJECT_VERSION);
+  const QUrl qtPack3rRepoAPI = QString("https://api.github.com/repos/Aciz/QtPack3r/releases");
+  const QUrl pack3rRepoAPI = QString("https://api.github.com/repos/ovska/Pack3r/releases");
 
-  preferences.init();
-
-  MainWindow window;
-  window.show();
-
-  return QApplication::exec();
-}
+  QNetworkAccessManager *manager{};
+};
