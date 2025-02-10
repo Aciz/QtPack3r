@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=QtPack3r
+GenericName=Wolf:ET pk3 creator
+Comment=Graphical user interface for Pack3r, a tool for creating release-ready Wolfenstein: Enemy Territory pk3 files.
+Icon=qtpack3r
+Exec=QtPack3r
+Terminal=false
+Categories=Utility;Game;
+StartupNotify=false
+Keywords=qtpack3r;pack3r;

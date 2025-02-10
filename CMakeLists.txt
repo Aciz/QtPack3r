@@ -45,7 +45,6 @@ qt_add_executable(${CMAKE_PROJECT_NAME}
         src/filesystem.h
         ${app_icon_resource_windows}
         resources/QtPack3r.qrc
-
 )
 
 get_version_description(QTPACK3R_VERSION)
@@ -83,6 +82,25 @@ if (Qt6_VERSION VERSION_GREATER_EQUAL "6.3")
 else()
     message(STATUS "Qt version is older than 6.3, skipping deploy script generation.")
 endif()
+
+# Packaging
+# TODO: this should probably be in it's own CMakeLists.txt in some asset directory
+if (WIN32)
+    set(ASSETS_IN "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.exe")
+    set(PACKAGE_NAME "${CMAKE_PROJECT_NAME}-${QTPACK3R_VERSION}-win-x64.zip")
+else ()
+    set(ASSETS_IN "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME};${CMAKE_SOURCE_DIR}/resources/linux/*")
+    set(PACKAGE_NAME "${CMAKE_PROJECT_NAME}-${QTPACK3R_VERSION}-linux-x64.zip")
+endif ()
+
+add_custom_target(pack_release
+        COMMAND ${CMAKE_COMMAND}
+        -DINPUT="${ASSETS_IN}"
+        -DOUTPUT="${PACKAGE_NAME}"
+        -P ${CMAKE_SOURCE_DIR}/cmake/PackageRelease.cmake
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMENT "Creating release package ${PACKAGE_NAME}"
+)
 
 # set startup project for Visual Studio
 if(CMAKE_GENERATOR MATCHES "Visual Studio")
