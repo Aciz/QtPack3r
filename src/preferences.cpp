@@ -38,7 +38,7 @@ void Preferences::init() {
   const auto locations = PREFERENCES_PATH;
 
   // this should never happen but just in case of some weirdness,
-  // use the users home directory as a fallback location0
+  // use the users home directory as a fallback location
   if (locations.empty()) {
     preferencesFile = QDir::homePath() + NATIVE_PATHSEP +
                       QApplication::applicationName() + NATIVE_PATHSEP +

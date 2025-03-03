@@ -23,6 +23,11 @@ else ()
     set(app_icon_resource_windows "")
 endif ()
 
+# MSVC does not enable multithreaded compilation by default
+if (MSVC)
+    add_compile_options(/MP)
+endif()
+
 qt_add_executable(${CMAKE_PROJECT_NAME}
         WIN32
         src/main.cpp
@@ -84,7 +89,13 @@ else()
     message(STATUS "Qt version is older than 6.3, skipping deploy script generation.")
 endif()
 
-# set startup project for Visual Studio
+# set Visual Studio specific stuff
 if(CMAKE_GENERATOR MATCHES "Visual Studio")
+    set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+    set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER CMake)
+
+    include(SourceGroup)
+
+    # set startup project
     set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${CMAKE_PROJECT_NAME})
 endif()
